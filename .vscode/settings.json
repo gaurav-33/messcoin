@@ -1,0 +1,6 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+    "github.copilot.advanced": {
+        "authProvider": "github"
+    }
+}
