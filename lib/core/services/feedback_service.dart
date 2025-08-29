@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../../core/network/api_response.dart';
 import '../../core/network/dio_client.dart';
 
@@ -10,7 +11,17 @@ class FeedbackService {
       String? imageFile}) async {
     try {
       final response = await dio.post('/feedback/create',
-          data: {'rating': rating, 'feedback': feedback, 'image': imageFile});
+          data: FormData.fromMap(
+            {
+              'image': imageFile != null
+                  ? await MultipartFile.fromFile(imageFile,
+                      filename: imageFile.split('/').last)
+                  : null,
+              'rating': rating,
+              'feedback': feedback,
+              // 'image': imageFile,
+            },
+          ));
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);

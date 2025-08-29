@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../core/network/api_response.dart';
 import '../../core/network/dio_client.dart';
 
@@ -37,7 +39,7 @@ class StudentService {
     try {
       final response = await dio.post(
         '/student/register',
-        data: {
+        data: FormData.fromMap({
           'fullName': name,
           'email': email,
           'password': password,
@@ -45,8 +47,11 @@ class StudentService {
           'roomNo': roomNo,
           'semester': semester,
           'mess': messId,
-          'image': imageFile
-        },
+          'image': imageFile != null
+              ? await MultipartFile.fromFile(imageFile,
+                  filename: imageFile.split('/').last)
+              : null,
+        }),
       );
       if (response.statusCode! < 299) {
         return ApiResponse.success(

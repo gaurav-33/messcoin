@@ -10,6 +10,7 @@ import '../../mess_admin/controllers/student_controller.dart';
 import '../../utils/extensions.dart';
 import '../../utils/responsive.dart';
 import '../../../../core/widgets/neu_button.dart';
+import '../../utils/show_image_dialog.dart';
 
 class StudentView extends StatelessWidget {
   const StudentView({super.key});
@@ -272,16 +273,19 @@ class StudentView extends StatelessWidget {
         SizedBox(
           width: 80,
           height: 80,
-          child: ClipOval(
-            child: FadeInImage(
-              image: NetworkImage(student.imageUrl),
-              placeholder: AssetImage('assets/images/profile.png'),
-              fit: BoxFit.cover,
-              imageErrorBuilder: (context, error, stackTrace) => Image.asset(
-                'assets/images/profile.png',
+          child: GestureDetector(
+            onTap: () => showImageDialog(context, student.imageUrl),
+            child: ClipOval(
+              child: FadeInImage(
+                image: NetworkImage(student.imageUrl),
+                placeholder: AssetImage('assets/images/profile.png'),
                 fit: BoxFit.cover,
-                width: 80,
-                height: 80,
+                imageErrorBuilder: (context, error, stackTrace) => Image.asset(
+                  'assets/images/profile.png',
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 80,
+                ),
               ),
             ),
           ),

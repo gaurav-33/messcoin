@@ -15,19 +15,15 @@ class BillView extends StatelessWidget {
   Widget build(BuildContext context) {
     final BillController controller = Get.put(BillController());
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: NeuAppBar(
-          toBack: true,
-        ),
-      ),
-      body: Center(
-        child: SizedBox(
-          width: Responsive.contentWidth(context),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               children: [
+                const SizedBox(height: 10),
+                const NeuAppBar(toBack: true),
+                const SizedBox(height: 24),
                 GestureDetector(
                   onTap: () async {
                     final picked = await showMonthPicker(
@@ -42,6 +38,7 @@ class BillView extends StatelessWidget {
                   },
                   child: NeuContainer(
                     padding: const EdgeInsets.all(16),
+                    width: Responsive.contentWidth(context),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -57,41 +54,41 @@ class BillView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Expanded(
-                  child: Obx(() {
-                    if (controller.isLoading.value) {
-                      return const Center(child: NeuLoader());
-                    }
-                    if (controller.error.isNotEmpty) {
-                      return Center(
-                        child: Text(controller.error.value,
-                            style: const TextStyle(color: Colors.red)),
-                      );
-                    }
-                    if (controller.bill.value == null) {
-                      return const Center(child: Text('No bill found for this month.'));
-                    }
-                    final bill = controller.bill.value!;
-                    return NeuContainer(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildBillRow('Total Days', '${bill.totalDays}'),
-                          _buildBillRow('Leave Days', '${bill.leaveDays}'),
-                          _buildBillRow('Attended Days', '${bill.attendedDays}'),
-                          _buildBillRow(
-                              'Per Day Meal Price', '₹${bill.perDayMealPrice}'),
-                          _buildBillRow('Meal Cost', '₹${bill.mealCost}'),
-                          _buildBillRow('Coupon Amount', '₹${bill.couponAmount}'),
-                          const Divider(height: 32),
-                          _buildBillRow('Final Amount', '₹${bill.finalAmount}',
-                              isTotal: true),
-                        ],
-                      ),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: NeuLoader());
+                  }
+                  if (controller.error.isNotEmpty) {
+                    return Center(
+                      child: Text(controller.error.value,
+                          style: const TextStyle(color: Colors.red)),
                     );
-                  }),
-                ),
+                  }
+                  if (controller.bill.value == null) {
+                    return const Center(
+                        child: Text('No bill found for this month.'));
+                  }
+                  final bill = controller.bill.value!;
+                  return NeuContainer(
+                    width: Responsive.contentWidth(context),
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildBillRow('Total Days', '${bill.totalDays}'),
+                        _buildBillRow('Leave Days', '${bill.leaveDays}'),
+                        _buildBillRow('Attended Days', '${bill.attendedDays}'),
+                        _buildBillRow(
+                            'Per Day Meal Price', '₹${bill.perDayMealPrice}'),
+                        _buildBillRow('Meal Cost', '₹${bill.mealCost}'),
+                        _buildBillRow('Coupon Amount', '₹${bill.couponAmount}'),
+                        const Divider(height: 32),
+                        _buildBillRow('Final Amount', '₹${bill.finalAmount}',
+                            isTotal: true),
+                      ],
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -100,7 +97,8 @@ class BillView extends StatelessWidget {
     );
   }
 
-  Widget _buildBillRow(String title, String value, {bool isTotal = false, Color? statusColor}) {
+  Widget _buildBillRow(String title, String value,
+      {bool isTotal = false, Color? statusColor}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

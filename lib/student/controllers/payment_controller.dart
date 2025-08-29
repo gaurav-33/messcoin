@@ -42,13 +42,13 @@ class PaymentController extends GetxController {
     List<ExtraMeal> currentExtras = [];
 
     if (extraMenuForToday != null) {
-      if (currentHour >= 1 && currentHour < 11) {
-        currentExtras.addAll(extraMenuForToday.dinner);
+      if (currentHour >= 6 && currentHour <= 11) {
+        currentExtras.addAll(extraMenuForToday.breakfast);
         currentMealName.value = "Breakfast Extras";
-      } else if (currentHour >= 11 && currentHour <= 15) {
+      } else if (currentHour > 11 && currentHour <= 15) {
         currentExtras.addAll(extraMenuForToday.lunch);
         currentMealName.value = "Lunch Extras";
-      } else if (currentHour >= 18 && currentHour < 23) {
+      } else if (currentHour >= 18 && currentHour <= 23) {
         currentExtras.addAll(extraMenuForToday.dinner);
         currentMealName.value = "Dinner Extras";
       } else {
@@ -241,7 +241,8 @@ class PaymentController extends GetxController {
               children: [
                 Expanded(
                     flex: 3,
-                    child: Text(item.item.toCamelCase(), style: textTheme.bodyMedium)),
+                    child: Text(item.item.toCamelCase(),
+                        style: textTheme.bodyMedium)),
                 Expanded(
                     flex: 1,
                     child: Text('$quantity',

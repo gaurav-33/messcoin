@@ -8,6 +8,7 @@ import '../../../../core/models/student_model.dart';
 import '../../../../core/widgets/input_field.dart';
 import '../../../../core/widgets/neu_button.dart';
 import '../../../../utils/responsive.dart';
+import '../../utils/show_image_dialog.dart';
 import '../controllers/dashboard_controller.dart';
 
 class ProfileView extends StatelessWidget {
@@ -67,12 +68,15 @@ class ProfileView extends StatelessWidget {
         NeuContainer(
           shape: BoxShape.circle,
           padding: const EdgeInsets.all(8),
-          child: CircleAvatar(
-            radius: 60,
-            backgroundColor: AppColors.bgColor,
-            backgroundImage: studentModel?.imageUrl != ''
-                ? NetworkImage(studentModel!.imageUrl)
-                : AssetImage('assets/images/profile.png'),
+          child: GestureDetector(
+            onTap: () => showImageDialog(context, studentModel?.imageUrl ?? ''),
+            child: CircleAvatar(
+              radius: 60,
+              backgroundColor: AppColors.bgColor,
+              backgroundImage: studentModel?.imageUrl != ''
+                  ? NetworkImage(studentModel!.imageUrl)
+                  : AssetImage('assets/images/profile.png'),
+            ),
           ),
         ),
         const SizedBox(height: 18),

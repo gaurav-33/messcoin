@@ -6,6 +6,7 @@ import '../../core/widgets/neu_container.dart';
 import '../../student/controllers/id_card_controller.dart';
 import '../../utils/extensions.dart';
 import '../../../../utils/responsive.dart';
+import '../../utils/show_image_dialog.dart';
 // import '../../../../core/widgets/neu_button.dart';
 
 class IdCardView extends StatelessWidget {
@@ -21,7 +22,7 @@ class IdCardView extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -116,12 +117,16 @@ class IdCardView extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColors.bgColor,
-              backgroundImage: controller.studentModel?.imageUrl != ''
-                  ? NetworkImage(controller.studentModel!.imageUrl)
-                  : AssetImage('assets/images/profile.png'),
+            GestureDetector(
+              onTap: () =>
+                  showImageDialog(context, controller.studentModel!.imageUrl),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: AppColors.bgColor,
+                backgroundImage: controller.studentModel?.imageUrl != ''
+                    ? NetworkImage(controller.studentModel!.imageUrl)
+                    : AssetImage('assets/images/profile.png'),
+              ),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -139,11 +144,15 @@ class IdCardView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-         CircleAvatar(
-          radius: 60,
-          backgroundImage: controller.studentModel!.imageUrl != ''
-              ? NetworkImage(controller.studentModel!.imageUrl)
-              : AssetImage('assets/images/profile.png'),
+        GestureDetector(
+          onTap: () =>
+              showImageDialog(context, controller.studentModel!.imageUrl),
+          child: CircleAvatar(
+            radius: 60,
+            backgroundImage: controller.studentModel!.imageUrl != ''
+                ? NetworkImage(controller.studentModel!.imageUrl)
+                : AssetImage('assets/images/profile.png'),
+          ),
         ),
         const SizedBox(height: 20),
         _buildStudentInfo(context, controller),

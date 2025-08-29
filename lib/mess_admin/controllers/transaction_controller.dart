@@ -26,13 +26,12 @@ class TransactionController extends GetxController {
 
   RxBool get isLive => SocketManager().isLive;
 
-
   // ⭐️ HELPER TO GET CURRENT MEAL NAME
   String get _currentMealName {
     final hour = DateTime.now().hour;
-    if (hour >= 6 && hour < 12) return 'Breakfast';
-    if (hour >= 12 && hour < 15) return 'Lunch';
-    if (hour >= 15 && hour < 23) return 'Dinner';
+    if (hour >= 6 && hour <= 11) return 'Breakfast';
+    if (hour > 11 && hour <= 15) return 'Lunch';
+    if (hour >= 18 && hour <= 23) return 'Dinner';
     return 'No Meal Active';
   }
 
@@ -48,14 +47,16 @@ class TransactionController extends GetxController {
       return transactions;
     }
     return transactions.where((txn) {
-      final hour = txn.createdAt.hour;
+      final hourString = DateFormat('HH')
+          .format(txn.createdAt.add(Duration(hours: 5, minutes: 30)));
+      final hour = int.tryParse(hourString) ?? 0;
       switch (selectedMealType.value) {
         case MealType.breakfast:
-          return hour >= 6 && hour < 12; // 6 AM to 11:59 AM
+          return hour >= 6 && hour <= 11; // 6 AM to 11:59 AM
         case MealType.lunch:
-          return hour >= 12 && hour < 15; // 12 PM to 2:59 PM
+          return hour > 11 && hour <= 15; // 12 PM to 2:59 PM
         case MealType.dinner:
-          return hour >= 15 && hour < 23; // 3 PM to 10:59 PM
+          return hour >= 18 && hour <= 23; // 6 PM to 10:59 PM
         case MealType.all:
           return true;
       }

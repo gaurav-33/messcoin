@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messcoin/utils/responsive.dart';
 import '../../config/app_colors.dart';
 import '../../core/widgets/neu_container.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ class UtilityWidget extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(Responsive.isMobile(context) ? 0 : 16),
         child: Column(
           children: [
             // Live Transaction Section
@@ -32,10 +33,12 @@ class UtilityWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleMedium),
                       const SizedBox(width: 8),
                       Obx(() => Icon(
-                        Icons.circle,
-                        size: 10,
-                        color: controller.isLive.value ? Colors.green : Colors.red,
-                      )),
+                            Icons.circle,
+                            size: 10,
+                            color: controller.isLive.value
+                                ? Colors.green
+                                : Colors.red,
+                          )),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -123,12 +126,12 @@ class UtilityWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleMedium),
                       const SizedBox(width: 8),
                       Obx(() => Icon(
-                        Icons.circle,
-                        size: 10,
-                        color: cpnController.isLive.value
-                            ? Colors.green
-                            : Colors.red,
-                      )),
+                            Icons.circle,
+                            size: 10,
+                            color: cpnController.isLive.value
+                                ? Colors.green
+                                : Colors.red,
+                          )),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -169,7 +172,6 @@ class UtilityWidget extends StatelessWidget {
                                       ],
                                     ),
                                     Row(
-                                      
                                       children: [
                                         Text('₹ ${cpn.amount}',
                                             style: Theme.of(context)

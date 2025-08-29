@@ -45,6 +45,7 @@ class HistoryView extends StatelessWidget {
                     child: SizedBox(
                       width: Responsive.contentWidth(context),
                       child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         itemCount: controller.historyItems.length,
                         itemBuilder: (context, index) {
                           final item = controller.historyItems[index];
@@ -89,7 +90,7 @@ class HistoryView extends StatelessWidget {
             : Icons.circle;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: GestureDetector(
         onTap: () => _showDetailsDialog(context, item, controller),
         child: NeuContainer(

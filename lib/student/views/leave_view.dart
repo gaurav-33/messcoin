@@ -58,7 +58,8 @@ class LeaveView extends StatelessWidget {
                             },
                           ),
                         ),
-                        _buildPaginationControls(context, controller),
+                        if (controller.studentLeaveTotalPages > 1)
+                          _buildPaginationControls(context, controller),
                       ],
                     ),
                   ),
