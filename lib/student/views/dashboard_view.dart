@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../config/app_colors.dart';
-import '../../core/routes/app_routes.dart';
 import '../../core/routes/student_routes.dart';
 import '../../core/widgets/app_bar.dart';
 import '../../core/widgets/neu_button.dart';
@@ -60,7 +59,7 @@ class DashboradView extends StatelessWidget {
       _GridItem(
           image: 'assets/images/daily-menu.png',
           title: 'Menu',
-          onTap: () => Get.toNamed(AppRoutes.getDailyMenu())),
+          onTap: () => Get.toNamed(StudentRoutes.getDailyMenu())),
       _GridItem(
           image: 'assets/images/card.png',
           title: 'ID Card',

@@ -34,9 +34,35 @@ class FeedbackService {
     }
   }
 
-  Future<ApiResponse> getFeedback(String messId) async {
+  Future<ApiResponse> getHMCFeedback(
+      {required String date, int page = 1, int limit = 10}) async {
     try {
-      final response = await dio.get('/feedback/get/$messId');
+      final response = await dio.get('/feedback/get-hmc', queryParameters: {
+        'date': date,
+        'page': page,
+        'limit': limit,
+      });
+      if (response.statusCode! < 299) {
+        return ApiResponse.success(
+            response.data['message'], response.data, response.statusCode!);
+      } else {
+        return ApiResponse.error(
+            response.data['message'], response.statusCode!);
+      }
+    } catch (e) {
+      return ApiResponse.error(e.toString(), 500);
+    }
+  }
+
+  Future<ApiResponse> replyToFeedback(
+      {required String feedbackId, required String reply}) async {
+    try {
+      final response = await dio.patch(
+        '/feedback/reply/$feedbackId',
+        data: {
+          'reply': reply,
+        },
+      );
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);

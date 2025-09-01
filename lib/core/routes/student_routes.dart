@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:messcoin/student/views/bill_view.dart';
+import 'package:messcoin/student/views/menu_view.dart';
 import '../../student/views/coupon_buy_view.dart';
 import '../../student/views/dashboard_view.dart';
 import '../../student/views/history_view.dart';
@@ -21,6 +22,7 @@ class StudentRoutes {
   static const String history = '/student/history';
   static const String leave = '/student/leave';
   static const String bill = '/student/bill';
+  static const String dailyMenu = '/daily-menu';
 
   static String getDashboard() => dashboard;
   static String getProfile() => profile;
@@ -32,6 +34,7 @@ class StudentRoutes {
   static String getHistory() => history;
   static String getLeave() => leave;
   static String getBill() => bill;
+  static String getDailyMenu() => dailyMenu;
 
   static List<GetPage> routes = [
     GetPage(name: dashboard, page: () => DashboradView()),
@@ -44,5 +47,6 @@ class StudentRoutes {
     GetPage(name: history, page: () => HistoryView()),
     GetPage(name: leave, page: () => LeaveView()),
     GetPage(name: bill, page: () => BillView()),
+    GetPage(name: dailyMenu, page: () => MenuView()),
   ];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/routes/admin_routes.dart';
+import '../../core/routes/hmc_routes.dart';
 import '../../core/storage/role_box_manager.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/routes/student_routes.dart';
@@ -16,7 +17,6 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
   RxBool isLoading = false.obs;
   RxBool isAdmin = false.obs;
-
 
   void login() async {
     if (isLoading.value) return;
@@ -41,13 +41,18 @@ class LoginController extends GetxController {
           ? await AdminService().loginAmin(email, password)
           : await StudentService().login(email, password);
       if (response.isSuccess) {
-        
         AppSnackbar.success(response.message ?? 'Login successful');
         await AuthBoxManager.clearToken();
         await AuthBoxManager.saveToken(response.data['data']['accessToken']);
         await RoleBoxManager.clearRole();
-        await RoleBoxManager.saveRole(response.data['data']['student']?['role'] ?? response.data['data']['admin']?['role']);
-        if ((response.data['data']['admin']?['role']).toString().contains('admin')) {
+        await RoleBoxManager.saveRole(response.data['data']['student']
+                ?['role'] ??
+            response.data['data']['admin']?['role']);
+        String role = response.data['data']['student']?['role'] ??
+            response.data['data']['admin']?['role'];
+        if (role == 'hmc_admin') {
+          Get.offAllNamed(HmcRoutes.getDashboard());
+        } else if (role == 'mess_admin') {
           Get.offAllNamed(AdminRoutes.getDashboard());
         } else {
           Get.offAllNamed(StudentRoutes.getDashboard());
