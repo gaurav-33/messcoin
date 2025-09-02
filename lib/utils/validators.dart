@@ -96,7 +96,8 @@ class Validators {
     if (value == null || value.trim().isEmpty) {
       return 'OTP is required';
     }
-    if (value.trim().length != 6 || !RegExp(r'^\d{6}$').hasMatch(value.trim())) {
+    if (value.trim().length != 6 ||
+        !RegExp(r'^\d{6}$').hasMatch(value.trim())) {
       return 'Enter a valid 6-digit OTP';
     }
     return null;
@@ -110,11 +111,10 @@ class Validators {
     if (amount == null || amount <= 0) {
       return 'Enter a valid amount greater than 0';
     }
-    if( amount > 6000) {
+    if (amount > 6000) {
       return 'Amount must be less than or equal to 6000';
     }
     return null;
-
   }
 
   static validateFeedback(String? value) {
@@ -123,6 +123,19 @@ class Validators {
     }
     if (value.length > 500) {
       return 'Feedback length should be less than 500';
+    }
+    return null;
+  }
+
+  static String? validatePhone(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Phone No. is required';
+    }
+    if (value.length != 10) {
+      return 'Enter a valid 10 digit phone number';
+    }
+    if (RegExp(r'^[0-5]').hasMatch(value)) {
+      return 'Enter a valid phone number';
     }
     return null;
   }

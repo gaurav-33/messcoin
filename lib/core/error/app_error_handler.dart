@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 // import '../utils/app_snackbar.dart';
 
 class AppErrorHandler {
@@ -9,6 +10,6 @@ class AppErrorHandler {
     //   msg,
     //   title: 'Error ${error.response?.statusCode ?? ''}',
     // );
-    print(msg);
+    debugPrint(msg);
   }
 }

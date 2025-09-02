@@ -37,14 +37,13 @@ class LiveFeedbackController extends GetxController {
 
   void _onNewFeedback(dynamic data) {
     try {
-      print(data);
       final fdb = FeedbackModel.fromJson(data);
       if (feedbackList.isEmpty || feedbackList.first.id != fdb.id) {
         feedbackList.insert(0, fdb);
         if (feedbackList.length > 100) feedbackList.removeLast();
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       AppSnackbar.error('Error parsing newTransaction: $e');
     }
   }

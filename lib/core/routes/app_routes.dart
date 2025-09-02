@@ -7,6 +7,7 @@ import '../../common/views/reset_password_view.dart';
 import '../../common/views/splash_view.dart';
 import '../../core/routes/admin_routes.dart';
 import '../../core/routes/student_routes.dart';
+import '../../core/routes/mess_staff_routes.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -14,7 +15,6 @@ class AppRoutes {
   static const String register = '/register';
   static const String resetPassword = '/reset-password';
   static const String otp = '/otp';
-  
 
   static String getSplash() => splash;
   static String getLogin() => login;
@@ -26,6 +26,7 @@ class AppRoutes {
     ...StudentRoutes.routes,
     ...AdminRoutes.routes,
     ...HmcRoutes.routes,
+    ...MessStaffRoutes.routes,
     GetPage(name: splash, page: () => const SplashView()),
     GetPage(name: login, page: () => LoginView()),
     GetPage(name: register, page: () => const RegisterView()),
@@ -33,4 +34,3 @@ class AppRoutes {
     GetPage(name: otp, page: () => OtpVerificationView()),
   ];
 }
-

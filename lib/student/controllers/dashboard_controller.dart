@@ -43,7 +43,7 @@ class DashboardController extends GetxController {
     } catch (e) {
       student.value = null;
       AppSnackbar.error('Failed to load student data');
-      print('Error loading student: $e');
+      debugPrint('Error loading student: $e');
     } finally {
       isLoading.value = false;
     }
@@ -83,7 +83,8 @@ class DashboardController extends GetxController {
     }
     isChangingPassword.value = true;
     try {
-      final response = await StudentService().changePassword(oldPassword: oldPassword, newPassword: newPassword);
+      final response = await StudentService()
+          .changePassword(oldPassword: oldPassword, newPassword: newPassword);
       if (response.isSuccess) {
         AppSnackbar.success('Password changed successfully');
         oldPasswordController.clear();

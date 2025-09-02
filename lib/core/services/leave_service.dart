@@ -61,7 +61,7 @@ class LeaveService {
     }
   }
 
-// TODO: add these in admin view
+
   Future<ApiResponse> getAllLeaveByStatus(
       {required String status, int page = 1, int limit = 10}) async {
     try {

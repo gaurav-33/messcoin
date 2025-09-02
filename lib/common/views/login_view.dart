@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../config/app_colors.dart';
 import '../../core/routes/app_routes.dart';
+import '../../core/routes/mess_staff_routes.dart';
 import '../../core/widgets/app_bar.dart';
 import '../../core/widgets/input_field.dart';
 import '../../core/widgets/neu_button.dart';
@@ -39,6 +40,7 @@ class LoginView extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.05),
                   GestureDetector(
                     onTap: FocusScope.of(context).unfocus,
+                    behavior: HitTestBehavior.translucent,
                     child: NeuContainer(
                       height: containerHeight,
                       width: containerWidth,
@@ -139,6 +141,18 @@ class LoginView extends StatelessWidget {
                     },
                     child: const Text(
                       "Register",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  NeuButton(
+                    width: containerWidth * 0.4,
+                    height: 45,
+                    onTap: () {
+                      Get.toNamed(MessStaffRoutes.getEmployeeLogin());
+                    },
+                    child: const Text(
+                      "Employee Login",
                       style: TextStyle(fontSize: 16),
                     ),
                   ),

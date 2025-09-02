@@ -225,7 +225,7 @@ class _ExtraMenuItemTile extends StatelessWidget {
                 builder: (ctx) => AlertDialog(
                   title: const Text('Delete Item'),
                   content:
-                      Text('Are you sure you want to delete \"${item.item}\"?'),
+                      Text('Are you sure you want to delete "${item.item}"?'),
                   actions: [
                     TextButton(
                         onPressed: () => Navigator.pop(ctx, false),

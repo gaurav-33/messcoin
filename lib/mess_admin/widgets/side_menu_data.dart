@@ -60,6 +60,11 @@ class SideMenuData {
       onTap: () => Get.toNamed(AdminRoutes.extraMenu, id: 1),
     ),
     SideMenuModel(
+      iconPath: 'assets/svgs/employee.svg',
+      title: 'Employee',
+      onTap: () => Get.toNamed(AdminRoutes.employee, id: 1),
+    ),
+    SideMenuModel(
       iconPath: 'assets/svgs/profile.svg',
       title: 'Profile',
       onTap: () => Get.toNamed(AdminRoutes.profile, id: 1),

@@ -1,18 +1,13 @@
-import '../../core/network/api_response.dart';
-import '../../core/network/dio_client.dart';
+import '../network/api_response.dart';
+import '../network/dio_client.dart';
 
-class TransactionService {
+class EmployeeService {
   final dio = DioClient().dio;
-
-  Future<ApiResponse> createTransaction(
-      {required double amount, String item = 'others', int qty = 1}) async {
+  Future<ApiResponse> registerEmployee(
+      {required String fullName, required String phone}) async {
     try {
-      final response = await dio.post(
-        '/transaction/create',
-        data: {
-          'amount': amount,
-        },
-      );
+      final response = await dio.post('/employee/register',
+          data: {'fullName': fullName, 'phone': phone});
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);
@@ -25,18 +20,11 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> createBulkTransaction({
-    required List<Map<String, dynamic>> items,
-    required double amount,
-  }) async {
+  Future<ApiResponse> loginEmployee(
+      {required String phone, required String password}) async {
     try {
-      final response = await dio.post(
-        '/transaction/create/bulk',
-        data: {
-          'amount': amount,
-          'items': items,
-        },
-      );
+      final response = await dio.post('/employee/login',
+          data: {'phone': phone, 'password': password});
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);
@@ -49,15 +37,9 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> getTransactions({int page = 1, int limit = 10}) async {
+  Future<ApiResponse> refreshAccessToken() async {
     try {
-      final response = await dio.get(
-        '/transaction/get',
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-        },
-      );
+      final response = await dio.get('/employee/refreshToken');
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);
@@ -70,18 +52,11 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> dailyTransaction(
-      {int page = 1, int limit = 10, required String date}) async {
+  Future<ApiResponse> generateNewPasswordEmployee(
+      {required String employeeId}) async {
     try {
-      final queryParams = {
-        'date': date,
-        'page': page,
-        'limit': limit,
-      };
-      final response = await dio.get(
-        '/transaction/daily',
-        queryParameters: queryParams,
-      );
+      final response =
+          await dio.get('/employee/generate-new-password/$employeeId');
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);
@@ -94,18 +69,9 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> dailyEmployeeTransaction(
-      {int page = 1, int limit = 10, required String date}) async {
+  Future<ApiResponse> getCurrentEmployee() async {
     try {
-      final queryParams = {
-        'date': date,
-        'page': page,
-        'limit': limit,
-      };
-      final response = await dio.get(
-        '/transaction/employee/daily',
-        queryParameters: queryParams,
-      );
+      final response = await dio.get('/employee/current');
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);
@@ -118,9 +84,9 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> dailyTransactionSummary() async {
+  Future<ApiResponse> deleteEmployee({required String employeeId}) async {
     try {
-      final response = await dio.get('/transaction/daily-summary');
+      final response = await dio.delete('/employee/delete/$employeeId');
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);
@@ -133,9 +99,9 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> monthlyTransactionSummary() async {
+  Future<ApiResponse> getAllEmployee() async {
     try {
-      final response = await dio.get('/transaction/monthly-summary');
+      final response = await dio.get('/employee/all');
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);

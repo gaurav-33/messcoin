@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:messcoin/mess_admin/bindings/employee_management_binding.dart';
+import 'package:messcoin/mess_admin/views/employee_management_view.dart';
 import '../../mess_admin/bindings/coupon_binding.dart';
 import '../../mess_admin/bindings/dashboard_binding.dart';
 import '../../mess_admin/bindings/extra_menu_binding.dart';
@@ -30,6 +32,7 @@ class AdminRoutes {
   static const String menu = '/admin/menu';
   static const String extraMenu = '/admin/extra-menu';
   static const String profile = '/admin/profile';
+  static const String employee = '/admin/employee';
 
   static String getDashboard() => dashboard;
   static String getDashboardContent() => dashboardContent;
@@ -41,6 +44,7 @@ class AdminRoutes {
   static String getMenu() => menu;
   static String getExtraMenu() => extraMenu;
   static String getProfile() => profile;
+  static String getEmployee() => employee;
 
   static List<GetPage> routes = [
     GetPage(
@@ -91,6 +95,11 @@ class AdminRoutes {
       name: profile,
       page: () => ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: employee,
+      page: () => EmployeeManagementView(),
+      binding: EmployeeManagementBinding(),
     ),
   ];
 }

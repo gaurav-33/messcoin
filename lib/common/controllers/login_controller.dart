@@ -65,11 +65,11 @@ class LoginController extends GetxController {
           await Future.delayed(Duration(microseconds: 500));
         }
         AppSnackbar.error(response.message ?? 'Login failed');
-        print('Login failed: ${response.message}');
+        debugPrint('Login failed: ${response.message}');
       }
     } catch (e) {
       AppSnackbar.error('An error occurred while logging in: $e');
-      print('Login error: $e');
+      debugPrint('Login error: $e');
     } finally {
       isLoading.value = false;
     }

@@ -193,7 +193,7 @@ class RegisterController extends GetxController {
     } else {
       AppSnackbar.error(
           response.message ?? "Something went wrong while fetching mess data");
-      print("Error fetching mess data: ${response.message}");
+      debugPrint("Error fetching mess data: ${response.message}");
     }
   }
 }

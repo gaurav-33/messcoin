@@ -147,7 +147,7 @@ class PaymentView extends StatelessWidget {
                 ),
               );
             });
-          }).toList(),
+          }),
           // 'Others' button for custom amount
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),

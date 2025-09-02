@@ -1,5 +1,8 @@
+import 'package:messcoin/core/network/api_response.dart';
+import 'package:messcoin/core/services/employee_service.dart';
 import '../../core/routes/admin_routes.dart';
 import '../../core/routes/hmc_routes.dart';
+import '../../core/routes/mess_staff_routes.dart';
 import '../../core/services/admin_service.dart';
 import '../../core/services/student_service.dart';
 import '../../core/storage/auth_box_manager.dart';
@@ -25,6 +28,8 @@ class SplashController extends GetxController {
       Get.offAllNamed(AdminRoutes.getDashboard());
     } else if (isLoggedIn && role == 'hmc_admin') {
       Get.offAllNamed(HmcRoutes.getDashboard());
+    } else if (isLoggedIn && role.contains('employee')) {
+      Get.offAllNamed(MessStaffRoutes.getMessStaffDashboard());
     } else {
       Get.offAllNamed(AppRoutes.getLogin());
     }
@@ -55,9 +60,14 @@ class SplashController extends GetxController {
 
   Future<bool> _refreshToken(String role) async {
     try {
-      final response = role.contains('admin')
-          ? await AdminService().refreshToken()
-          : await StudentService().refreshToken();
+      late final ApiResponse response;
+      if (role.contains('admin')) {
+        response = await AdminService().refreshToken();
+      } else if (role == 'student') {
+        response = await StudentService().refreshToken();
+      } else if (role.contains('employee')) {
+        response = await EmployeeService().refreshAccessToken();
+      }
 
       if (response.isSuccess) {
         await AuthBoxManager.clearToken();

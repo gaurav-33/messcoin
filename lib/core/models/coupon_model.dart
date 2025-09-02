@@ -68,7 +68,7 @@ class CouponModel {
       couponId: json['coupon_id'] ?? '',
       approvedBy: json['approvedBy'] is String
           ? json['approvedBy']
-          : (json['approvedBy']?['_id'] ?? null),
+          : (json['approvedBy']?['_id']),
       createdAt:
           DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
       updatedAt:
