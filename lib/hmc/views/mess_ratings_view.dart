@@ -7,10 +7,11 @@ import 'package:messcoin/hmc/controllers/hmc_mess_ratings_controller.dart';
 import 'package:messcoin/utils/extensions.dart';
 import '../../core/models/weekly_rating_model.dart';
 import '../../core/widgets/app_bar.dart';
+import '../../core/widgets/neu_button.dart';
 import '../../utils/responsive.dart';
 
-class MessRatingsView extends GetView<MessRatingsController> {
-  const MessRatingsView({Key? key}) : super(key: key);
+class MessRatingsView extends StatelessWidget {
+  const MessRatingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,47 +25,73 @@ class MessRatingsView extends GetView<MessRatingsController> {
               const SizedBox(height: 10),
               const NeuAppBar(toBack: true),
               const SizedBox(height: 24),
-              Text(
-                'Mess Ratings',
-                style: Theme.of(context).textTheme.headlineMedium,
+              Center(
+                child: SizedBox(
+                  width: Responsive.contentWidth(context),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'Mess Ratings',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        ),
+                      ),
+                      NeuButton(
+                        width: 40,
+                        height: 40,
+                        shape: BoxShape.circle,
+                        onTap: () => controller.fetchWeeklyRatings(),
+                        child:
+                            Icon(Icons.refresh, color: AppColors.primaryColor),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
               Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: NeuLoader());
-                  }
-                  if (controller.error.value.isNotEmpty) {
-                    return Center(child: Text(controller.error.value));
-                  }
-                  return ListView.builder(
-                    itemCount: controller.weeklyRatingsByWeek.keys.length,
-                    itemBuilder: (context, index) {
-                      final week =
-                          controller.weeklyRatingsByWeek.keys.elementAt(index);
-                      final ratings = controller.weeklyRatingsByWeek[week]!;
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: NeuContainer(
-                          width: Responsive.contentWidth(context),
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Week of $week',
-                                style: Get.textTheme.titleLarge,
+                child: Center(
+                  child: SizedBox(
+                    width: Responsive.contentWidth(context),
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(child: NeuLoader());
+                      }
+                      if (controller.error.value.isNotEmpty) {
+                        return Center(child: Text(controller.error.value));
+                      }
+                      return ListView.builder(
+                        itemCount: controller.weeklyRatingsByWeek.keys.length,
+                        itemBuilder: (context, index) {
+                          final week = controller.weeklyRatingsByWeek.keys
+                              .elementAt(index);
+                          final ratings = controller.weeklyRatingsByWeek[week]!;
+                          return Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: NeuContainer(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Week of $week',
+                                    style: Get.textTheme.titleLarge,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ...ratings.map(
+                                      (rating) => _buildRatingCard(rating)),
+                                ],
                               ),
-                              const SizedBox(height: 16),
-                              ...ratings
-                                  .map((rating) => _buildRatingCard(rating)),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       );
-                    },
-                  );
-                }),
+                    }),
+                  ),
+                ),
               ),
             ],
           ),

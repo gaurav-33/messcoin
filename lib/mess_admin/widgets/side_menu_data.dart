@@ -65,6 +65,11 @@ class SideMenuData {
       onTap: () => Get.toNamed(AdminRoutes.employee, id: 1),
     ),
     SideMenuModel(
+      iconPath: 'assets/svgs/counter.svg',
+      title: 'Counters',
+      onTap: () => Get.toNamed(AdminRoutes.counter, id: 1),
+    ),
+    SideMenuModel(
       iconPath: 'assets/svgs/profile.svg',
       title: 'Profile',
       onTap: () => Get.toNamed(AdminRoutes.profile, id: 1),

@@ -216,8 +216,18 @@ class ReportController extends GetxController {
     isExporting.value = false;
   }
 
+  Future<void> generateBill(int month, int year) async {
+    isExportingBill.value = true;
+    final resp = await BillService().createBill(month: month, year: year);
+    if (resp.isSuccess) {
+    } else {
+      AppSnackbar.error('Failed to generate bill: ${resp.message}');
+    }
+  }
+
   Future<void> exportBillAsPdf(int month, int year) async {
     isExportingBill.value = true;
+    await generateBill(month, year);
     final resp =
         await BillService().downloadMonthlyPdfBill(month: month, year: year);
     if (resp.isSuccess && resp.data != null) {
@@ -233,6 +243,7 @@ class ReportController extends GetxController {
 
   Future<void> exportBillAsExcel(int month, int year) async {
     isExportingBill.value = true;
+    await generateBill(month, year);
     final resp =
         await BillService().downloadMonthlyExcelBill(month: month, year: year);
     if (resp.isSuccess && resp.data != null) {

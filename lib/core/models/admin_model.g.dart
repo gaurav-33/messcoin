@@ -21,6 +21,7 @@ class AdminModelAdapter extends TypeAdapter<AdminModel> {
       fullName: fields[1] as String,
       email: fields[2] as String,
       mess: fields[3] as Mess?,
+      imageUrl: fields[7] as String?,
       role: fields[4] as String,
       createdAt: fields[5] as DateTime,
       updatedAt: fields[6] as DateTime,
@@ -30,7 +31,7 @@ class AdminModelAdapter extends TypeAdapter<AdminModel> {
   @override
   void write(BinaryWriter writer, AdminModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class AdminModelAdapter extends TypeAdapter<AdminModel> {
       ..writeByte(5)
       ..write(obj.createdAt)
       ..writeByte(6)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(7)
+      ..write(obj.imageUrl);
   }
 
   @override

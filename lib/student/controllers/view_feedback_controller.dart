@@ -24,8 +24,8 @@ class ViewFeedbackController extends GetxController {
       if (response.isSuccess) {
         final List data = response.data['data']['feedbacks'];
         feedbackList.value = data.map((e) => FeedbackModel.fromJson(e)).toList();
-        currentPage.value = response.data['data']['currentPage'] ?? page;
-        totalPages.value = response.data['data']['totalPages'] ?? 1;
+        currentPage.value = response.data['data']['page'] ?? page;
+        totalPages.value = response.data['data']['pages'] ?? 1;
       } else {
         AppSnackbar.error(response.message ?? 'Failed to load feedback list');
       }

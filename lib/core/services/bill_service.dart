@@ -29,13 +29,11 @@ class BillService {
 
   Future<ApiResponse> createBill(
       {required int month,
-      required int year,
-      required int perDayMealPrice}) async {
+      required int year}) async {
     try {
       final response = await dio.post('/bill/generate', data: {
         'month': month,
         'year': year,
-        'perDayMealPrice': perDayMealPrice,
       });
       if (response.statusCode! < 299) {
         return ApiResponse.success(

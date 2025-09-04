@@ -110,7 +110,8 @@ class MessStaffTransactionsView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-
+              _buildCounterFilter(context, controller),
+              const SizedBox(height: 8),
               // ⭐️ ADD MEAL FILTER WIDGET
               _buildMealFilter(context, controller),
 
@@ -170,6 +171,36 @@ class MessStaffTransactionsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildCounterFilter(
+      BuildContext context, MessStaffTransactionsController controller) {
+    return Obx(() {
+      return Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        alignment: WrapAlignment.center,
+        children: List.generate(controller.counters, (index) {
+          final counter = index + 1;
+          final isSelected = controller.selectedCounterNo.value == counter;
+          return NeuButton(
+            onTap: () => controller.changeCounterNo(counter),
+            invert: isSelected,
+            shape: BoxShape.circle,
+            height: 40,
+            width: 40,
+            child: Text(
+              '$counter',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: isSelected ? AppColors.bgColor : AppColors.dark,
+                    fontWeight:
+                        isSelected ? FontWeight.w500 : FontWeight.normal,
+                  ),
+            ),
+          );
+        }),
+      );
+    });
   }
 
   // ⭐️ ADD THIS NEW WIDGET FOR MEAL FILTERS
@@ -449,6 +480,8 @@ class MessStaffTransactionsView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.currentPage > 1
                 ? () => controller.fetchTransactions(
@@ -466,6 +499,8 @@ class MessStaffTransactionsView extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.currentPage < controller.totalPages
                 ? () => controller.fetchTransactions(

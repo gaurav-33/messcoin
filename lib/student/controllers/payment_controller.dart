@@ -20,6 +20,8 @@ class PaymentController extends GetxController {
   StudentModel? get studentModel =>
       Get.find<DashboardController>().student.value;
 
+  int get counters =>
+      Get.find<DashboardController>().student.value?.mess.counters ?? 1;
   final MessMenuController _menuController = Get.find<MessMenuController>();
   final RxList<ExtraMeal> todaysExtras = <ExtraMeal>[].obs;
 
@@ -27,11 +29,16 @@ class PaymentController extends GetxController {
 
   final RxBool isCustomAmount = true.obs;
   final RxString currentMealName = "Extras".obs;
+  final RxInt selectedCounter = 1.obs;
 
   @override
   void onInit() {
     super.onInit();
     _loadTodaysExtras();
+  }
+
+  void changeCounter(int counter) {
+    selectedCounter.value = counter;
   }
 
   void _loadTodaysExtras() {
@@ -89,9 +96,12 @@ class PaymentController extends GetxController {
   }
 
   void decrementQuantity(ExtraMeal item) {
-    if (selectedItems.containsKey(item) && selectedItems[item]! > 1) {
+    if (selectedItems.containsKey(item) && selectedItems[item]! > 0) {
       selectedItems[item] = selectedItems[item]! - 1;
       _updateTotalAmount();
+    }
+    if (selectedItems[item] == 0) {
+      toggleItemSelection(item);
     }
   }
 
@@ -132,10 +142,11 @@ class PaymentController extends GetxController {
       final String totalAmount = amount;
 
       if (isCustomAmount.value) {
-        final response = await TransactionService().createTransaction(
+                final response = await TransactionService().createTransaction(
           amount: double.parse(amount),
           item: 'others',
           qty: 1,
+          counter: selectedCounter.value,
         );
         if (response.isSuccess) {
           showPaymentSuccessDialog(
@@ -173,9 +184,10 @@ class PaymentController extends GetxController {
           return;
         }
 
-        final response = await TransactionService().createBulkTransaction(
+                final response = await TransactionService().createBulkTransaction(
           amount: parsedAmount,
           items: itemsPayload,
+          counter: selectedCounter.value,
         );
 
         if (response.isSuccess) {

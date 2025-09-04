@@ -25,67 +25,70 @@ class SideMenuWidget extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              NeuAppBar(),
-              const SizedBox(
-                height: 50,
-              ),
-              Obx(
-                () => Column(
-                  children: [
-                    ...List.generate(menuData.length, (index) {
-                      final menu = menuData[index];
-                      final bool isSelected =
-                          index == controller.selectedIndex;
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: NeuButton(
-                          invert: isSelected,
-                          invertColor: isSelected ? AppColors.lightDark : null,
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          onTap: () {
-                            controller.selectedIndex = index;
-                            menu.onTap();
-                            if (!Responsive.isDesktop(context)) {
-                              Get.back();
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SvgPicture.asset(
-                                menu.iconPath,
-                                color: isSelected
-                                    ? AppColors.lightShadowColor
-                                    : menu.color ?? AppColors.dark,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                menu.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                      color: isSelected
-                                          ? AppColors.lightShadowColor
-                                          : AppColors.dark,
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.w500,
-                                      letterSpacing: 1,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    })
-                  ],
+          child: SafeArea(
+            child: Column(
+              children: [
+                NeuAppBar(),
+                const SizedBox(
+                  height: 50,
                 ),
-              ),
-            ],
+                Obx(
+                  () => Column(
+                    children: [
+                      ...List.generate(menuData.length, (index) {
+                        final menu = menuData[index];
+                        final bool isSelected =
+                            index == controller.selectedIndex;
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: NeuButton(
+                            invert: isSelected,
+                            invertColor:
+                                isSelected ? AppColors.lightDark : null,
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            onTap: () {
+                              controller.selectedIndex = index;
+                              menu.onTap();
+                              if (!Responsive.isDesktop(context)) {
+                                Get.back();
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset(
+                                  menu.iconPath,
+                                  color: isSelected
+                                      ? AppColors.lightShadowColor
+                                      : menu.color ?? AppColors.dark,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  menu.title,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        color: isSelected
+                                            ? AppColors.lightShadowColor
+                                            : AppColors.dark,
+                                        fontWeight: isSelected
+                                            ? FontWeight.bold
+                                            : FontWeight.w500,
+                                        letterSpacing: 1,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      })
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

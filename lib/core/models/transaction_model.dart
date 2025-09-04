@@ -33,6 +33,7 @@ class TransactionModel {
   final String? item;
   final int quantity;
   final String status;
+  final int counter;
 
   TransactionModel({
     required this.id,
@@ -46,6 +47,7 @@ class TransactionModel {
     required this.item,
     required this.quantity,
     required this.status,
+    required this.counter,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
@@ -78,6 +80,9 @@ class TransactionModel {
       item: json['item'] ?? 'others',
       quantity: json['quantity'] ?? 1,
       status: json['status'] ?? 'pending',
+      counter: (json['counter'] is int)
+          ? json['counter']
+          : int.tryParse(json['counter']?.toString() ?? '1') ?? 1,
     );
   }
 
@@ -93,6 +98,7 @@ class TransactionModel {
       'item': item,
       'quantity': quantity,
       'status': status,
+      'counter': counter
     };
   }
 }

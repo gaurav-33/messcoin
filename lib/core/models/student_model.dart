@@ -128,16 +128,22 @@ class Mess {
   final String name;
   @HiveField(1)
   final String hostel;
+  @HiveField(2)
+  final int? counters;
 
   Mess({
     required this.name,
     required this.hostel,
+    this.counters = 1,
   });
 
   factory Mess.fromJson(Map<String, dynamic> json) {
     return Mess(
       name: json['name'] ?? '',
       hostel: json['hostel'] ?? '',
+      counters: (json['counters'] ?? 1) is int
+          ? json['counters']
+          : int.parse(json['counters']?.toString() ?? '1'),
     );
   }
 
@@ -145,6 +151,7 @@ class Mess {
     return {
       'name': name,
       'hostel': hostel,
+      'counters': counters,
     };
   }
 }

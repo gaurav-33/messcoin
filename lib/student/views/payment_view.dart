@@ -62,6 +62,8 @@ class PaymentView extends StatelessWidget {
                             style: textTheme.titleLarge,
                           ),
                         ),
+                        const SizedBox(height: 12),
+                        _buildCounterSelector(context, controller),
                         const SizedBox(height: 24),
                         _buildExtraMenuItems(context, controller),
                         const SizedBox(height: 24),
@@ -90,6 +92,45 @@ class PaymentView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCounterSelector(
+      BuildContext context, PaymentController controller) {
+    return Column(
+      children: [
+        Text(
+          'Select Counter',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 16),
+        Obx(
+          () => Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            alignment: WrapAlignment.center,
+            children: List.generate(controller.counters, (index) {
+              final counter = index + 1;
+              final isSelected = controller.selectedCounter.value == counter;
+              return NeuButton(
+                onTap: () => controller.changeCounter(counter),
+                invert: isSelected,
+                shape: BoxShape.circle,
+                height: 40,
+                width: 40,
+                child: Text(
+                  '$counter',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isSelected ? AppColors.bgColor : AppColors.dark,
+                        fontWeight:
+                            isSelected ? FontWeight.w500 : FontWeight.normal,
+                      ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
     );
   }
 

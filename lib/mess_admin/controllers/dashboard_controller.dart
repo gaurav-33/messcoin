@@ -107,6 +107,12 @@ class DashboardController extends GetxController {
     }
   }
 
+  void refreshAll(){
+    fetchLast7DaysOverview();
+    fetchActiveStudents();
+    fetchMessDetails();
+  }
+
   @override
   void onInit() {
     super.onInit();

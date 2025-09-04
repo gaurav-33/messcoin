@@ -33,9 +33,27 @@ class MessService {
       return ApiResponse.error(e.toString(), 500);
     }
   }
+
   Future<ApiResponse> getMess() async {
     try {
       final response = await dio.get('/mess/get');
+      if (response.statusCode! < 299) {
+        return ApiResponse.success(
+            response.data['message'], response.data, response.statusCode!);
+      } else {
+        return ApiResponse.error(
+            response.data['message'], response.statusCode!);
+      }
+    } catch (e) {
+      return ApiResponse.error(e.toString(), 500);
+    }
+  }
+
+  Future<ApiResponse> updateMessCounter(int counters) async {
+    try {
+      print(counters);
+      final response =
+          await dio.post('/mess/counter/update', data: {'counters': counters});
       if (response.statusCode! < 299) {
         return ApiResponse.success(
             response.data['message'], response.data, response.statusCode!);

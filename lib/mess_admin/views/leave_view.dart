@@ -425,6 +425,8 @@ class LeaveView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         NeuButton(
+          width: 50,
+          height: 50,
           shape: BoxShape.circle,
           onTap: currentPage > 1 ? () => onPageChanged(currentPage - 1) : null,
           child: const Icon(Icons.keyboard_arrow_left_rounded),
@@ -435,6 +437,8 @@ class LeaveView extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium),
         ),
         NeuButton(
+          width: 50,
+          height: 50,
           shape: BoxShape.circle,
           onTap: currentPage < totalPages
               ? () => onPageChanged(currentPage + 1)

@@ -64,8 +64,7 @@ class CouponView extends StatelessWidget {
               child: const Icon(Icons.menu, color: AppColors.dark),
             ),
           ),
-        Text('Coupon Requests',
-            style: Theme.of(context).textTheme.headlineMedium),
+        Text('Coupons', style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(width: 12),
         Obx(() => Row(
               children: [
@@ -85,12 +84,12 @@ class CouponView extends StatelessWidget {
             )),
         const Spacer(),
         NeuButton(
-                width: 40,
-                height: 40,
-                shape: BoxShape.circle,
-                onTap: () => controller.fetchPendingCoupons(),
-                child: Icon(Icons.refresh, color: AppColors.primaryColor),
-              ),
+          width: 40,
+          height: 40,
+          shape: BoxShape.circle,
+          onTap: () => controller.fetchPendingCoupons(),
+          child: Icon(Icons.refresh, color: AppColors.primaryColor),
+        ),
       ],
     );
   }
@@ -138,7 +137,7 @@ class CouponView extends StatelessWidget {
     }
 
     // Show a loader for the initial fetch or when changing pages
-    if (isLoading && coupons.isEmpty) {
+    if (isLoading) {
       return const Center(child: NeuLoader());
     }
 
@@ -208,69 +207,72 @@ class CouponView extends StatelessWidget {
     );
   }
 
-
   Widget _buildCouponCard(
       BuildContext context, CouponController controller, CouponModel coupon) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: NeuContainer(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    coupon.studentData?.fullName.toCamelCase() ??
-                        'Unknown Student',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      behavior: HitTestBehavior.translucent,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: NeuContainer(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      coupon.studentData?.fullName.toCamelCase() ??
+                          'Unknown Student',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '₹ ${coupon.amount.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'FiraCode',
-                      ),
-                ),
-              ],
-            ),
-            Text('Roll: ${coupon.studentData?.rollNo ?? 'N/A'}'),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Coupon ID', style: TextStyle(fontSize: 12)),
-                      SelectableText(coupon.couponId,
-                          style: const TextStyle(fontFamily: 'FiraCode')),
-                    ],
+                  const SizedBox(width: 8),
+                  Text(
+                    '₹ ${coupon.amount.toStringAsFixed(2)}',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'FiraCode',
+                        ),
                   ),
-                ),
-                if (coupon.status == 'pending')
-                  _buildActionButtons(context, controller, coupon),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Requested: ${coupon.createdAt.toString().toKolkataTime()}',
-                style: Theme.of(context).textTheme.bodySmall,
+                ],
               ),
-            ),
-          ],
+              Text('Roll: ${coupon.studentData?.rollNo ?? 'N/A'}'),
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Coupon ID', style: TextStyle(fontSize: 12)),
+                        SelectableText(coupon.couponId,
+                            style: const TextStyle(fontFamily: 'FiraCode')),
+                      ],
+                    ),
+                  ),
+                  if (coupon.status == 'pending')
+                    _buildActionButtons(context, controller, coupon),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Requested: ${coupon.createdAt.toString().toKolkataTime()}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -282,18 +284,21 @@ class CouponView extends StatelessWidget {
       child: NeuContainer(
         margin: const EdgeInsets.all(16),
         child: DataTable(
-          
           columns: [
-             DataColumn(label: Expanded(child: Text('Student Name',),)),
-          const DataColumn(label: Text('Roll No.')),
-          const DataColumn(label: Text('Amount')),
-          const DataColumn(label: Text('Coupon ID')),
-          if (status == 'pending')
-            const DataColumn(label: Text('Actions')),
+            DataColumn(
+                label: Expanded(
+              child: Text(
+                'Student Name',
+              ),
+            )),
+            const DataColumn(label: Text('Roll No.')),
+            const DataColumn(label: Text('Amount')),
+            const DataColumn(label: Text('Coupon ID')),
+            if (status == 'pending') const DataColumn(label: Text('Actions')),
           ],
-          dataRowMinHeight: status == 'pending' ? 95: 0,
-          dataRowMaxHeight: status == 'pending' ? 95: kMinInteractiveDimension,
-        columnSpacing: 24,
+          dataRowMinHeight: status == 'pending' ? 95 : 0,
+          dataRowMaxHeight: status == 'pending' ? 95 : kMinInteractiveDimension,
+          columnSpacing: 24,
           rows: coupons.map((coupon) {
             return DataRow(cells: [
               DataCell(
@@ -325,7 +330,6 @@ class CouponView extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildActionButtons(
       BuildContext context, CouponController controller, CouponModel coupon) {

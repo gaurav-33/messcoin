@@ -132,17 +132,20 @@ class MessAdapter extends TypeAdapter<Mess> {
     return Mess(
       name: fields[0] as String,
       hostel: fields[1] as String,
+      counters: fields[2] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Mess obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.hostel);
+      ..write(obj.hostel)
+      ..writeByte(2)
+      ..write(obj.counters);
   }
 
   @override

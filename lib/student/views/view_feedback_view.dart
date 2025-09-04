@@ -37,8 +37,7 @@ class ViewFeedbackView extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: Obx(() {
-                if (controller.isLoading.value &&
-                    controller.feedbackList.isEmpty) {
+                if (controller.isLoading.value) {
                   return const Center(child: NeuLoader());
                 }
                 if (controller.feedbackList.isEmpty) {
@@ -51,7 +50,8 @@ class ViewFeedbackView extends StatelessWidget {
                         child: SizedBox(
                           width: Responsive.contentWidth(context),
                           child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             itemCount: controller.feedbackList.length,
                             itemBuilder: (context, index) {
                               final feedback = controller.feedbackList[index];
@@ -121,6 +121,8 @@ class ViewFeedbackView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              _buildReplySection(context, feedback),
+              const SizedBox(height: 8),
             ],
             Align(
               alignment: Alignment.centerRight,
@@ -165,6 +167,8 @@ class ViewFeedbackView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.currentPage.value > 1
                 ? () => controller.fetchFeedbackList(
@@ -181,6 +185,8 @@ class ViewFeedbackView extends StatelessWidget {
             ),
           ),
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.currentPage.value < controller.totalPages.value
                 ? () => controller.fetchFeedbackList(
@@ -194,4 +200,32 @@ class ViewFeedbackView extends StatelessWidget {
     );
   }
 
+  Widget _buildReplySection(BuildContext context, FeedbackModel feedback) {
+    final textTheme = Theme.of(context).textTheme;
+    return NeuContainer(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Reply from HMC:',
+            style: textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            feedback.reply!,
+            style: textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              feedback.updatedAt.toString().toKolkataTime(),
+              style: textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -13,8 +13,8 @@ class DioClient {
   Future<void> init() async {
     final options = BaseOptions(
       baseUrl: dotenv.env['BASE_URL'] ?? 'https://www.google.com',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 20),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

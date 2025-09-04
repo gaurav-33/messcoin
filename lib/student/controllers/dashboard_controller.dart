@@ -25,6 +25,7 @@ class DashboardController extends GetxController {
   }
 
   Future<void> loadStudent() async {
+    if (isLoading.value) return;
     isLoading.value = true;
 
     try {

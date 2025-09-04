@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:messcoin/core/models/transaction_model.dart';
 import 'package:messcoin/core/services/transaction_service.dart';
+import 'package:messcoin/mess_staff/controllers/mess_staff_dashboard_controller.dart';
 import 'package:messcoin/utils/app_snackbar.dart';
 import '../../core/sockets/socket_manager.dart';
 
@@ -21,12 +22,18 @@ class MessStaffTransactionsController extends GetxController {
   int pageSize = 20;
   RxBool get isLive => SocketManager().isLive;
 
+  RxInt selectedCounterNo = 1.obs; // 0 for all counters
+
+  int get counters =>
+      Get.find<MessStaffDashboardController>().messDetail.value!.counters;
+
   // ⭐️ ADD COMPUTED LIST FOR FILTERED TRANSACTIONS
   List<TransactionModel> get displayTransactions {
-    if (selectedMealType.value == MealType.all) {
-      return transactions;
-    }
-    return transactions.where((txn) {
+    // First, filter by meal type
+    List<TransactionModel> filteredByMeal = transactions.where((txn) {
+      if (selectedMealType.value == MealType.all) {
+        return true;
+      }
       final hourString = DateFormat('HH')
           .format(txn.createdAt.add(Duration(hours: 5, minutes: 30)));
       final hour = int.tryParse(hourString) ?? 0;
@@ -41,6 +48,15 @@ class MessStaffTransactionsController extends GetxController {
           return true;
       }
     }).toList();
+
+    // Then, filter by counter number
+    if (selectedCounterNo.value == 1) {
+      return filteredByMeal; // No counter filter applied
+    } else {
+      return filteredByMeal
+          .where((txn) => txn.counter == selectedCounterNo.value)
+          .toList();
+    }
   }
 
   String get liveStatusText {
@@ -56,7 +72,7 @@ class MessStaffTransactionsController extends GetxController {
     if (hour >= 6 && hour <= 11) return 'Breakfast';
     if (hour > 11 && hour <= 15) return 'Lunch';
     if (hour >= 18 && hour <= 23) return 'Dinner';
-    return 'No Meal Active';
+    return '_';
   }
 
   Future<void> fetchTransactions({
@@ -102,6 +118,10 @@ class MessStaffTransactionsController extends GetxController {
   void changeMealType(MealType meal) {
     selectedMealType.value = meal;
     fetchTransactions();
+  }
+
+  void changeCounterNo(int counter) {
+    selectedCounterNo.value = counter;
   }
 
   void _onNewTransaction(dynamic data) {

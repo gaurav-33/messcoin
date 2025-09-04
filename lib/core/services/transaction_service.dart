@@ -5,13 +5,14 @@ class TransactionService {
   final dio = DioClient().dio;
 
   Future<ApiResponse> createTransaction(
-      {required double amount, String item = 'others', int qty = 1}) async {
+      {required double amount,
+      String item = 'others',
+      int qty = 1,
+      counter = 1}) async {
     try {
       final response = await dio.post(
         '/transaction/create',
-        data: {
-          'amount': amount,
-        },
+        data: {'amount': amount, 'counter': counter},
       );
       if (response.statusCode! < 299) {
         return ApiResponse.success(
@@ -25,17 +26,14 @@ class TransactionService {
     }
   }
 
-  Future<ApiResponse> createBulkTransaction({
-    required List<Map<String, dynamic>> items,
-    required double amount,
-  }) async {
+  Future<ApiResponse> createBulkTransaction(
+      {required List<Map<String, dynamic>> items,
+      required double amount,
+      int counter = 1}) async {
     try {
       final response = await dio.post(
         '/transaction/create/bulk',
-        data: {
-          'amount': amount,
-          'items': items,
-        },
+        data: {'amount': amount, 'items': items, 'counter': counter},
       );
       if (response.statusCode! < 299) {
         return ApiResponse.success(

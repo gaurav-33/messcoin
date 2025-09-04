@@ -37,7 +37,7 @@ class LeaveView extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: Obx(() {
-                if (controller.isLoading.value && controller.leaves.isEmpty) {
+                if (controller.isLoading.value) {
                   return const Center(child: NeuLoader());
                 }
                 if (controller.leaves.isEmpty) {
@@ -171,6 +171,8 @@ class LeaveView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.studentLeaveCurrentPage > 1
                 ? () => controller.fetchLeaves(
@@ -182,13 +184,15 @@ class LeaveView extends StatelessWidget {
                 Icon(Icons.keyboard_arrow_left_rounded, color: AppColors.dark),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Page ${controller.studentLeaveCurrentPage} of ${controller.studentLeaveTotalPages}',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.studentLeaveCurrentPage <
                     controller.studentLeaveTotalPages

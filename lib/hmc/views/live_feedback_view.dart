@@ -367,6 +367,8 @@ class LiveFeedbackView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.currentPage.value > 1
                 ? () => controller.fetchFeedbackList(
@@ -383,6 +385,8 @@ class LiveFeedbackView extends StatelessWidget {
             ),
           ),
           NeuButton(
+            width: 50,
+            height: 50,
             shape: BoxShape.circle,
             onTap: controller.currentPage.value < controller.totalPages.value
                 ? () => controller.fetchFeedbackList(
