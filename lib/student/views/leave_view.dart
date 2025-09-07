@@ -180,8 +180,7 @@ class LeaveView extends StatelessWidget {
                     page: controller.studentLeaveCurrentPage - 1,
                     limit: controller.studentLeavePageSize)
                 : null,
-            child:
-                Icon(Icons.keyboard_arrow_left_rounded, color: AppColors.dark),
+            child: Icon(Icons.keyboard_arrow_left_rounded),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -201,8 +200,7 @@ class LeaveView extends StatelessWidget {
                     page: controller.studentLeaveCurrentPage + 1,
                     limit: controller.studentLeavePageSize)
                 : null,
-            child:
-                Icon(Icons.keyboard_arrow_right_rounded, color: AppColors.dark),
+            child: Icon(Icons.keyboard_arrow_right_rounded),
           ),
         ],
       ),

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:messcoin/core/models/mess_model.dart';
 import 'package:messcoin/hmc/controllers/hmc_live_feedback_controller.dart';
 import 'package:messcoin/utils/extensions.dart';
-import '../../config/app_colors.dart';
 import '../../core/models/feedback_model.dart';
 import '../../core/widgets/app_bar.dart';
 import '../../core/widgets/neu_button.dart';
@@ -19,6 +18,7 @@ class LiveFeedbackView extends StatelessWidget {
   Widget build(BuildContext context) {
     final LiveFeedbackController controller =
         Get.find<LiveFeedbackController>();
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -32,7 +32,7 @@ class LiveFeedbackView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Feedback',
-                      style: Theme.of(context).textTheme.headlineMedium),
+                      style: theme.textTheme.headlineMedium),
                   const SizedBox(width: 12),
                   Obx(() => Row(
                         children: [
@@ -45,7 +45,7 @@ class LiveFeedbackView extends StatelessWidget {
                           Text(
                             controller.isLive.value ? 'Live' : 'Offline',
                             style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                theme.textTheme.bodySmall?.copyWith(
                                       color: controller.isLive.value
                                           ? Colors.green
                                           : Colors.red,
@@ -75,13 +75,11 @@ class LiveFeedbackView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.calendar_today,
-                              size: 20, color: AppColors.primaryColor),
+                              size: 20, color: theme.colorScheme.secondary),
                           const SizedBox(width: 8),
                           Text(
                             controller.selectedDate,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
+                            style: theme.textTheme.bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.w500),
                           ),
                         ],
@@ -124,14 +122,14 @@ class LiveFeedbackView extends StatelessWidget {
                                 final feedback = controller.feedbackList[index];
                                 RxBool isImageExpanded = false.obs;
                                 return _buildFeedbackCard(
-                                    context, feedback, isImageExpanded);
+                                    context, feedback, isImageExpanded, theme);
                               },
                             ),
                           ),
                         ),
                       ),
                       if (controller.totalPages.value > 1)
-                        _buildPaginationControls(context, controller),
+                        _buildPaginationControls(context, controller, theme),
                     ],
                   );
                 }),
@@ -144,8 +142,8 @@ class LiveFeedbackView extends StatelessWidget {
   }
 
   Widget _buildFeedbackCard(
-      BuildContext context, FeedbackModel feedback, RxBool isImageExpanded) {
-    final textTheme = Theme.of(context).textTheme;
+      BuildContext context, FeedbackModel feedback, RxBool isImageExpanded, ThemeData theme) {
+    final textTheme = theme.textTheme;
     final LiveFeedbackController controller = Get.find();
 
     return Padding(
@@ -156,7 +154,7 @@ class LiveFeedbackView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildStudentAndMessInfo(
-                context, feedback.studentData, feedback.messData),
+                context, feedback.studentData, feedback.messData, theme),
             const SizedBox(height: 16),
             _buildRatingDisplay(context, feedback.rating, () {
               if (controller.replyToFeedbackId.value == feedback.id) {
@@ -164,7 +162,7 @@ class LiveFeedbackView extends StatelessWidget {
               } else {
                 controller.setReplyTo(feedback.id);
               }
-            }),
+            }, theme),
             const SizedBox(height: 16),
             if (feedback.feedback.isNotEmpty) ...[
               Text(
@@ -187,7 +185,7 @@ class LiveFeedbackView extends StatelessWidget {
                           width: 50,
                           height: 50,
                           child:
-                              Icon(Icons.image, color: AppColors.primaryColor),
+                              Icon(Icons.image, color: theme.colorScheme.secondary),
                           onTap: () {
                             isImageExpanded.value = !isImageExpanded.value;
                           },
@@ -212,8 +210,8 @@ class LiveFeedbackView extends StatelessWidget {
                                           : const Center(child: NeuLoader());
                                     },
                                     errorBuilder: (context, error, stackTrace) {
-                                      return const Icon(Icons.broken_image,
-                                          color: AppColors.lightDark);
+                                      return Icon(Icons.broken_image,
+                                          color: theme.colorScheme.onSurface.withOpacity(0.5));
                                     },
                                   ),
                                 ),
@@ -224,7 +222,7 @@ class LiveFeedbackView extends StatelessWidget {
                           NeuButton(
                             width: 40,
                             shape: BoxShape.circle,
-                            child: Icon(Icons.close),
+                            child: const Icon(Icons.close),
                             onTap: () {
                               isImageExpanded.value = !isImageExpanded.value;
                             },
@@ -248,7 +246,7 @@ class LiveFeedbackView extends StatelessWidget {
                       'Reply from HMC:',
                       style: textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor,
+                        color: theme.colorScheme.secondary,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -284,8 +282,8 @@ class LiveFeedbackView extends StatelessWidget {
                         onTap: () {
                           controller.createReply();
                         },
-                        child: const Icon(Icons.send,
-                            color: AppColors.primaryColor),
+                        child: Icon(Icons.send,
+                            color: theme.colorScheme.secondary),
                       ),
                     ],
                   ),
@@ -299,7 +297,7 @@ class LiveFeedbackView extends StatelessWidget {
               child: Text(
                 feedback.createdAt.toString().toKolkataTime(),
                 style:
-                    textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                    textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
               ),
             ),
           ],
@@ -309,26 +307,27 @@ class LiveFeedbackView extends StatelessWidget {
   }
 
   Widget _buildStudentAndMessInfo(
-      BuildContext context, StudentModel? student, MessModel? mess) {
+      BuildContext context, StudentModel? student, MessModel? mess, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           student?.fullName.toCamelCase() ?? 'N/A',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: theme.textTheme.titleLarge,
           overflow: TextOverflow.visible,
         ),
-        Text(student?.rollNo ?? 'N/A'),
+        Text(student?.rollNo ?? 'N/A', style: theme.textTheme.bodyMedium),
         Text(
           mess?.name.toCamelCase() ?? 'N/A',
           overflow: TextOverflow.visible,
+          style: theme.textTheme.bodyMedium,
         ),
       ],
     );
   }
 
   Widget _buildRatingDisplay(
-      BuildContext context, int rating, VoidCallback onReply) {
+      BuildContext context, int rating, VoidCallback onReply, ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -343,7 +342,7 @@ class LiveFeedbackView extends StatelessWidget {
                     ? 'assets/images/star-filled.png'
                     : 'assets/images/star.png',
                 height: 24,
-                color: isSelected ? AppColors.primaryColor : AppColors.dark,
+                color: isSelected ? theme.colorScheme.secondary : theme.colorScheme.onSurface.withOpacity(0.5),
               ),
             );
           }),
@@ -353,14 +352,14 @@ class LiveFeedbackView extends StatelessWidget {
           height: 40,
           onTap: onReply,
           shape: BoxShape.circle,
-          child: Icon(Icons.reply, color: AppColors.dark),
+          child: Icon(Icons.reply, color: theme.iconTheme.color),
         )
       ],
     );
   }
 
   Widget _buildPaginationControls(
-      BuildContext context, LiveFeedbackController controller) {
+      BuildContext context, LiveFeedbackController controller, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
@@ -375,13 +374,13 @@ class LiveFeedbackView extends StatelessWidget {
                     page: controller.currentPage.value - 1)
                 : null,
             child:
-                Icon(Icons.keyboard_arrow_left_rounded, color: AppColors.dark),
+                Icon(Icons.keyboard_arrow_left_rounded, color: theme.iconTheme.color),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               'Page ${controller.currentPage.value} of ${controller.totalPages.value}',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium,
             ),
           ),
           NeuButton(
@@ -393,7 +392,7 @@ class LiveFeedbackView extends StatelessWidget {
                     page: controller.currentPage.value + 1)
                 : null,
             child:
-                Icon(Icons.keyboard_arrow_right_rounded, color: AppColors.dark),
+                Icon(Icons.keyboard_arrow_right_rounded, color: theme.iconTheme.color),
           ),
         ],
       ),

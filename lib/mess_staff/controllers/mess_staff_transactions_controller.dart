@@ -24,8 +24,10 @@ class MessStaffTransactionsController extends GetxController {
 
   RxInt selectedCounterNo = 1.obs; // 0 for all counters
 
-  int get counters =>
-      Get.find<MessStaffDashboardController>().messDetail.value!.counters;
+  int get counters {
+    final messDetail = Get.find<MessStaffDashboardController>().messDetail.value;
+    return messDetail?.counters ?? 1;
+  }
 
   // ⭐️ ADD COMPUTED LIST FOR FILTERED TRANSACTIONS
   List<TransactionModel> get displayTransactions {
@@ -35,7 +37,7 @@ class MessStaffTransactionsController extends GetxController {
         return true;
       }
       final hourString = DateFormat('HH')
-          .format(txn.createdAt.add(Duration(hours: 5, minutes: 30)));
+          .format(txn.createdAt.add(const Duration(hours: 5, minutes: 30)));
       final hour = int.tryParse(hourString) ?? 0;
       switch (selectedMealType.value) {
         case MealType.breakfast:

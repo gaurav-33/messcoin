@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
 
 class NeuButton extends StatelessWidget {
-  const NeuButton(
-      {super.key,
-      this.width,
-      this.height,
-      required this.child,
-      this.onTap,
-      this.shape,
-      this.invert,
-      this.padding,
-      this.invertColor,
-      });
+  const NeuButton({
+    super.key,
+    this.width,
+    this.height,
+    required this.child,
+    this.onTap,
+    this.shape,
+    this.invert,
+    this.padding,
+    this.invertColor,
+  });
 
   final double? width;
   final double? height;
@@ -25,6 +24,7 @@ class NeuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -36,25 +36,25 @@ class NeuButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: shape != null ? null : BorderRadius.circular(15),
             color: invert != null && invert!
-                ? invertColor ?? AppColors.primaryColor
-                : AppColors.bgColor,
+                ? invertColor ?? theme.colorScheme.secondary
+                : theme.colorScheme.surface,
             shape: shape ?? BoxShape.rectangle,
             boxShadow: [
               BoxShadow(
-                color: AppColors.darkShadowColor,
+                color: theme.colorScheme.shadow,
                 blurRadius: 10,
                 spreadRadius: 1,
                 offset: invert != null && invert == true
-                    ? -Offset(5, 5)
-                    : Offset(5, 5),
+                    ? const Offset(-5, -5)
+                    : const Offset(5, 5),
               ),
               BoxShadow(
-                color: AppColors.lightShadowColor,
+                color: theme.colorScheme.onPrimary,
                 blurRadius: 10,
                 spreadRadius: 1,
                 offset: invert != null && invert == true
-                    ? Offset(5, 5)
-                    : -Offset(5, 5),
+                    ? const Offset(5, 5)
+                    : const Offset(-5, -5),
               ),
             ],
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:messcoin/config/app_colors.dart';
 import 'package:messcoin/core/widgets/neu_container.dart';
 import 'package:messcoin/core/widgets/neu_loader.dart';
 import 'package:messcoin/hmc/controllers/hmc_mess_ratings_controller.dart';
@@ -16,6 +15,7 @@ class MessRatingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MessRatingsController controller = Get.find<MessRatingsController>();
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -35,7 +35,7 @@ class MessRatingsView extends StatelessWidget {
                         child: Center(
                           child: Text(
                             'Mess Ratings',
-                            style: Theme.of(context).textTheme.headlineMedium,
+                            style: theme.textTheme.headlineMedium,
                           ),
                         ),
                       ),
@@ -45,7 +45,7 @@ class MessRatingsView extends StatelessWidget {
                         shape: BoxShape.circle,
                         onTap: () => controller.fetchWeeklyRatings(),
                         child:
-                            Icon(Icons.refresh, color: AppColors.primaryColor),
+                            Icon(Icons.refresh, color: theme.colorScheme.secondary),
                       ),
                     ],
                   ),
@@ -82,7 +82,7 @@ class MessRatingsView extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 16),
                                   ...ratings.map(
-                                      (rating) => _buildRatingCard(rating)),
+                                      (rating) => _buildRatingCard(rating, theme)),
                                 ],
                               ),
                             ),
@@ -100,7 +100,7 @@ class MessRatingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildRatingCard(WeeklyRatingModel rating) {
+  Widget _buildRatingCard(WeeklyRatingModel rating, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
@@ -120,7 +120,7 @@ class MessRatingsView extends StatelessWidget {
                     style: Get.textTheme.bodyMedium),
                 Row(
                   children: [
-                    Icon(Icons.star, color: AppColors.primaryColor),
+                    Icon(Icons.star, color: theme.colorScheme.secondary),
                     const SizedBox(width: 4),
                     Text(rating.feedbackAvgRating.toStringAsFixed(1),
                         style: Get.textTheme.bodyMedium),
@@ -130,6 +130,7 @@ class MessRatingsView extends StatelessWidget {
             ),
             Divider(
               height: 10,
+              color: theme.dividerColor,
             )
           ],
         ),

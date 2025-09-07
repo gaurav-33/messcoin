@@ -1,69 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../common/controllers/reset_password_controller.dart';
-import '../../config/app_colors.dart';
-import '../../core/widgets/app_bar.dart';
-import '../../core/widgets/input_field.dart';
-import '../../core/widgets/neu_button.dart';
-import '../../core/widgets/neu_container.dart';
-import '../../core/widgets/neu_loader.dart';
-import '../../utils/responsive.dart';
+import 'package:messcoin/common/controllers/reset_password_controller.dart';
+import 'package:messcoin/core/widgets/app_bar.dart';
+import 'package:messcoin/core/widgets/input_field.dart';
+import 'package:messcoin/core/widgets/neu_button.dart';
+import 'package:messcoin/core/widgets/neu_container.dart';
+import 'package:messcoin/core/widgets/neu_loader.dart';
+import 'package:messcoin/utils/responsive.dart';
 
 class ResetPasswordView extends StatelessWidget {
   const ResetPasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ResetPasswordController controller = Get.put(ResetPasswordController());
-    final double screenHeight = MediaQuery.of(context).size.height;
-    // Use the responsive utility for consistent width
-    final double containerWidth = Responsive.contentWidth(context);
+    final ResetPasswordController controller =
+        Get.put(ResetPasswordController());
+    final screenHeight = MediaQuery.of(context).size.height;
+    final containerWidth = Responsive.contentWidth(context);
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          // Ensure the content can be centered on screen
           child: Container(
-            constraints: BoxConstraints(
-                minHeight: screenHeight - MediaQuery.of(context).padding.top),
-            padding:
-                EdgeInsets.symmetric(horizontal: Responsive.contentPadding(context)),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const NeuAppBar(),
-                  SizedBox(height: screenHeight * 0.05),
-                  NeuContainer(
-                    width: containerWidth,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 20),
+            constraints: BoxConstraints(minHeight: screenHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                const NeuAppBar(
+                  toBack: true,
+                ),
+                SizedBox(height: screenHeight * 0.05),
+                NeuContainer(
+                  width: containerWidth,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
                     child: Obx(
                       () => Column(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             "Reset Password",
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
-                          const SizedBox(height: 25),
-                          // AnimatedSwitcher provides a smooth transition between steps
+                          SizedBox(height: screenHeight * 0.03),
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
-                            transitionBuilder:
-                                (Widget child, Animation<double> animation) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(0.0, 0.1),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: child,
-                                ),
-                              );
-                            },
-                            // Conditionally build the view based on the current step
                             child: controller.step.value == 1
                                 ? _buildEmailStep(
                                     context, controller, containerWidth)
@@ -74,8 +57,14 @@ class ResetPasswordView extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text("Back to Login")),
+              ],
             ),
           ),
         ),
@@ -83,88 +72,83 @@ class ResetPasswordView extends StatelessWidget {
     );
   }
 
-  /// Builds the UI for Step 1: Entering the email address.
   Widget _buildEmailStep(BuildContext context,
       ResetPasswordController controller, double containerWidth) {
+    final theme = Theme.of(context);
     return Column(
-      key: const ValueKey(1), // Key for AnimatedSwitcher
+      key: const ValueKey(1),
       children: [
         InputField(
-          controller: controller.emailController,
-          width: containerWidth * 0.9,
-          label: "Email",
-          hintText: "Enter your email",
+          label: 'Email',
+          hintText: 'Enter your email',
           keyboardType: TextInputType.emailAddress,
+          controller: controller.emailController,
+          width: Responsive.contentWidth(context),
         ),
-        const SizedBox(height: 30),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            NeuButton(
-              width: containerWidth * 0.45,
-              height: 50,
-              onTap: controller.sendOtp,
-              child: controller.isLoading.value
-                  ? const NeuLoader()
-                  : const Text("Send OTP"),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Obx(
+            () => NeuButton(
+              onTap: () {
+                controller.isAdmin.toggle();
+              },
+              width: 40,
+              height: 40,
+              shape: BoxShape.circle,
+              invert: controller.isAdmin.value,
+              child: Icon(
+                  controller.isAdmin.value
+                      ? Icons.person
+                      : Icons.person_outline,
+                  color: controller.isAdmin.value
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurface),
             ),
-            Column(
-              children: [
-                NeuButton(
-                  height: 50, // Fixed size for a consistent circular shape
-                  width: 50,
-                  shape: BoxShape.circle,
-                  invert: controller.isAdmin.value,
-                  onTap: () {
-                    controller.isAdmin.value = !controller.isAdmin.value;
-                  },
-                  child: Icon(
-                    Icons.person_outline,
-                    color: controller.isAdmin.value
-                        ? AppColors.bgColor
-                        : AppColors.dark,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text('Admin', style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-          ],
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+        Obx(
+          () => NeuButton(
+            onTap: controller.sendOtp,
+            child: controller.isLoading.value
+                ? const NeuLoader()
+                : const Text("Send OTP"),
+          ),
         ),
       ],
     );
   }
 
-  /// Builds the UI for Step 2: Entering the OTP and new password.
-  Widget _buildOtpStep(BuildContext context,
-      ResetPasswordController controller, double containerWidth) {
+  Widget _buildOtpStep(BuildContext context, ResetPasswordController controller,
+      double containerWidth) {
     return Column(
-      key: const ValueKey(2), // Key for AnimatedSwitcher
+      key: const ValueKey(2),
       children: [
         InputField(
-          controller: controller.otpController,
-          width: containerWidth * 0.9,
-          label: "OTP",
-          hintText: "Enter the OTP",
+          label: 'OTP',
+          hintText: 'Enter the OTP',
           keyboardType: TextInputType.number,
+          controller: controller.otpController,
+          width: Responsive.contentWidth(context),
         ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
         InputField(
-          controller: controller.newPasswordController,
-          width: containerWidth * 0.9,
-          label: "New Password",
-          hintText: "Enter new password",
+          label: 'New Password',
+          hintText: 'Enter new password',
           obscure: true,
           keyboardType: TextInputType.visiblePassword,
+          controller: controller.newPasswordController,
+          width: Responsive.contentWidth(context),
         ),
-        const SizedBox(height: 30),
-        NeuButton(
-          width: containerWidth * 0.45,
-          height: 50,
-          onTap: controller.submit,
-          child: controller.isLoading.value
-              ? const NeuLoader()
-              : const Text("Submit"),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+        Obx(
+          () => NeuButton(
+            onTap: controller.submit,
+            child: controller.isLoading.value
+                ? const NeuLoader()
+                : const Text("Submit"),
+          ),
         ),
       ],
     );

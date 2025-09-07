@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../core/models/coupon_model.dart';
 import '../../core/widgets/neu_button.dart';
 import '../../core/widgets/neu_container.dart';
-import '../../config/app_colors.dart';
 import '../../core/widgets/neu_loader.dart';
 import '../../mess_admin/controllers/coupon_controller.dart';
 import '../../utils/extensions.dart';
@@ -15,23 +14,24 @@ class CouponView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CouponController controller = Get.put(CouponController());
+    final theme = Theme.of(context);
 
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: AppColors.bgColor,
+          backgroundColor: theme.colorScheme.surface,
           elevation: 0,
           toolbarHeight: 80,
           title: _buildHeader(context, controller),
-          bottom: const TabBar(
-            labelColor: AppColors.primaryColor,
-            unselectedLabelColor: AppColors.darkShadowColor,
-            indicatorColor: AppColors.primaryColor,
+          bottom: TabBar(
+            labelColor: theme.colorScheme.secondary,
+            unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.5),
+            indicatorColor: theme.colorScheme.secondary,
             dividerColor: Colors.transparent,
             indicatorWeight: 3.0,
-            tabs: [
+            tabs: const [
               Tab(icon: Icon(Icons.pending_actions), text: 'Pending'),
               Tab(icon: Icon(Icons.check_circle_outline), text: 'Approved'),
               Tab(icon: Icon(Icons.cancel_outlined), text: 'Rejected'),
@@ -53,6 +53,7 @@ class CouponView extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, CouponController controller) {
     final bool isDesktop = Responsive.isDesktop(context);
+    final theme = Theme.of(context);
     return Row(
       children: [
         if (!isDesktop)
@@ -61,10 +62,10 @@ class CouponView extends StatelessWidget {
             child: NeuButton(
               onTap: () => Scaffold.of(context).openDrawer(),
               width: 45,
-              child: const Icon(Icons.menu, color: AppColors.dark),
+              child: Icon(Icons.menu, color: theme.iconTheme.color),
             ),
           ),
-        Text('Coupons', style: Theme.of(context).textTheme.headlineMedium),
+        Text('Coupons', style: theme.textTheme.headlineMedium),
         const SizedBox(width: 12),
         Obx(() => Row(
               children: [
@@ -74,7 +75,7 @@ class CouponView extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   controller.isLive.value ? 'Live' : 'Offline',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                         color:
                             controller.isLive.value ? Colors.green : Colors.red,
                         fontWeight: FontWeight.bold,
@@ -88,7 +89,7 @@ class CouponView extends StatelessWidget {
           height: 40,
           shape: BoxShape.circle,
           onTap: () => controller.fetchPendingCoupons(),
-          child: Icon(Icons.refresh, color: AppColors.primaryColor),
+          child: Icon(Icons.refresh, color: theme.colorScheme.secondary),
         ),
       ],
     );
@@ -129,19 +130,16 @@ class CouponView extends StatelessWidget {
         break;
     }
 
-    // FIX: Trigger initial fetch only once per tab.
     if (!hasAttemptedFetch.value) {
       hasAttemptedFetch.value =
-          true; // Set flag immediately to prevent re-triggering
+          true; 
       fetchPage(1);
     }
 
-    // Show a loader for the initial fetch or when changing pages
     if (isLoading) {
       return const Center(child: NeuLoader());
     }
 
-    // Main content area
     Widget contentArea = coupons.isEmpty
         ? Center(
             child: Text(
@@ -163,20 +161,17 @@ class CouponView extends StatelessWidget {
       children: [
         Expanded(child: contentArea),
 
-        // Pagination Controls
         if (totalPages > 1)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: SizedBox(
                 child: Row(
-              // Obx to rebuild buttons on state change
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Previous Button
                 NeuButton(
                   onTap: (currentPage > 1 && !isLoading)
                       ? () => fetchPage(currentPage - 1)
-                      : null, // Disable if on first page or loading
+                      : null, 
                   padding: const EdgeInsets.all(12),
                   shape: BoxShape.circle,
                   child: const Icon(Icons.arrow_back_ios_new, size: 18),
@@ -191,11 +186,10 @@ class CouponView extends StatelessWidget {
                   ),
                 ),
 
-                // Next Button
                 NeuButton(
                   onTap: (currentPage < totalPages && !isLoading)
                       ? () => fetchPage(currentPage + 1)
-                      : null, // Disable if on last page or loading
+                      : null, 
                   padding: const EdgeInsets.all(12),
                   shape: BoxShape.circle,
                   child: const Icon(Icons.arrow_forward_ios, size: 18),
@@ -209,6 +203,7 @@ class CouponView extends StatelessWidget {
 
   Widget _buildCouponCard(
       BuildContext context, CouponController controller, CouponModel coupon) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       behavior: HitTestBehavior.translucent,
@@ -226,17 +221,15 @@ class CouponView extends StatelessWidget {
                     child: Text(
                       coupon.studentData?.fullName.toCamelCase() ??
                           'Unknown Student',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
+                      style: theme.textTheme.titleLarge
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
                     '₹ ${coupon.amount.toStringAsFixed(2)}',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.primaryColor,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                          color: theme.colorScheme.secondary,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'FiraCode',
                         ),
@@ -268,7 +261,7 @@ class CouponView extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Text(
                   'Requested: ${coupon.createdAt.toString().toKolkataTime()}',
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: theme.textTheme.bodySmall,
                 ),
               ),
             ],
@@ -280,12 +273,13 @@ class CouponView extends StatelessWidget {
 
   Widget _buildCouponsDataTable(BuildContext context,
       CouponController controller, List<CouponModel> coupons, String status) {
+    // final theme = Theme.of(context);
     return SingleChildScrollView(
       child: NeuContainer(
         margin: const EdgeInsets.all(16),
         child: DataTable(
           columns: [
-            DataColumn(
+            const DataColumn(
                 label: Expanded(
               child: Text(
                 'Student Name',
@@ -333,6 +327,7 @@ class CouponView extends StatelessWidget {
 
   Widget _buildActionButtons(
       BuildContext context, CouponController controller, CouponModel coupon) {
+    // final theme = Theme.of(context);
     return Wrap(
       spacing: 12.0,
       runSpacing: 8.0,
@@ -343,14 +338,14 @@ class CouponView extends StatelessWidget {
           width: 45,
           height: 45,
           onTap: () => controller.approveCoupon(coupon.id),
-          child: const Icon(Icons.check, color: AppColors.success, size: 20),
+          child: Icon(Icons.check, color: Colors.green, size: 20),
         ),
         NeuButton(
           shape: BoxShape.circle,
           width: 45,
           height: 45,
           onTap: () => controller.rejectCoupon(coupon.id),
-          child: const Icon(Icons.close, color: AppColors.error, size: 20),
+          child: Icon(Icons.close, color: Colors.red, size: 20),
         ),
       ],
     );
@@ -358,10 +353,10 @@ class CouponView extends StatelessWidget {
 
   Widget _buildTableActionButtons(
       BuildContext context, CouponController controller, CouponModel coupon) {
-    // Replaced Row with Wrap to prevent overflow
+    // final theme = Theme.of(context);
     return Wrap(
-      spacing: 8.0, // Horizontal space between buttons
-      runSpacing: 8.0, // Vertical space if buttons wrap
+      spacing: 8.0, 
+      runSpacing: 8.0, 
       children: [
         Tooltip(
           message: 'Approve',
@@ -370,7 +365,7 @@ class CouponView extends StatelessWidget {
             shape: BoxShape.circle,
             height: 35,
             width: 35,
-            child: const Icon(Icons.check, color: AppColors.success, size: 20),
+            child: const Icon(Icons.check, color: Colors.green, size: 20),
           ),
         ),
         Tooltip(
@@ -380,7 +375,7 @@ class CouponView extends StatelessWidget {
             shape: BoxShape.circle,
             height: 35,
             width: 35,
-            child: const Icon(Icons.close, color: AppColors.error, size: 20),
+            child: const Icon(Icons.close, color: Colors.red, size: 20),
           ),
         ),
       ],

@@ -4,7 +4,6 @@ import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/core/widgets/neu_button.dart';
 import 'package:messcoin/mess_staff/controllers/mess_staff_dashboard_controller.dart';
 import 'package:messcoin/core/routes/mess_staff_routes.dart';
-import '../../config/app_colors.dart';
 import '../../utils/responsive.dart';
 
 class _GridItem {
@@ -32,6 +31,7 @@ class MessStaffDashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final MessStaffDashboardController controller =
         Get.find<MessStaffDashboardController>();
+    final theme = Theme.of(context);
     final List<_GridItem> gridItems = [
       _GridItem(
           image: 'assets/images/purchase-history.png',
@@ -39,18 +39,18 @@ class MessStaffDashboardView extends StatelessWidget {
           onTap: () => Get.toNamed(MessStaffRoutes.getMessStaffTransactions()),
           circle: true,
           isSpecial: true,
-          color: AppColors.primaryColor),
+          color: theme.colorScheme.secondary),
       _GridItem(
           image: 'assets/images/logout.png',
           title: 'Logout',
           onTap: () => controller.logout(),
-          color: AppColors.primaryColor.withOpacity(0.6),
+          color: theme.colorScheme.error,
           circle: true),
     ];
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +58,7 @@ class MessStaffDashboardView extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                NeuAppBar(
+                const NeuAppBar(
                   toBack: false,
                 ),
                 const SizedBox(
@@ -66,7 +66,7 @@ class MessStaffDashboardView extends StatelessWidget {
                 ),
                 Text(
                   'Staff Dashboard',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: theme.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 24),
                 LayoutBuilder(
@@ -152,6 +152,7 @@ class NeuTileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
       width: size + 10,
       child: Column(
@@ -166,7 +167,7 @@ class NeuTileButton extends StatelessWidget {
             child: Image.asset(
               image,
               height: circle == true && isSpecial == true ? size : size * 0.7,
-              color: color ?? AppColors.dark,
+              color: color ?? theme.colorScheme.onSurface,
             ),
           ),
           if (title != null && title!.isNotEmpty)
@@ -174,7 +175,7 @@ class NeuTileButton extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6.0),
               child: Text(
                 title!,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: theme.textTheme.bodySmall,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

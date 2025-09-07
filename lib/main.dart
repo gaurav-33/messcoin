@@ -19,7 +19,7 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
   await DioClient().init();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +31,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Mess Coin',
       theme: AppTheme.lightTheme,
-      home: SplashView(),
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
+      home: const SplashView(),
       getPages: AppRoutes.routes,
       initialRoute: AppRoutes.getSplash(),
     );

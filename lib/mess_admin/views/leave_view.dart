@@ -3,13 +3,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/leave_model.dart';
 import '../../utils/extensions.dart';
-import '../../../../config/app_colors.dart';
-import '../../../../core/widgets/neu_button.dart';
-import '../../../../core/widgets/neu_container.dart';
-import '../../../../core/widgets/input_field.dart';
-import '../../../../core/widgets/neu_loader.dart';
-import '../../../../mess_admin/controllers/leave_controller.dart';
-import '../../../../utils/responsive.dart';
+import '../../core/widgets/neu_button.dart';
+import '../../core/widgets/neu_container.dart';
+import '../../core/widgets/input_field.dart';
+import '../../core/widgets/neu_loader.dart';
+import '../../mess_admin/controllers/leave_controller.dart';
+import '../../utils/responsive.dart';
 
 class LeaveView extends StatelessWidget {
   const LeaveView({super.key});
@@ -17,6 +16,7 @@ class LeaveView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LeaveController controller = Get.find<LeaveController>();
+    final theme = Theme.of(context);
 
     return Obx(() {
       final bool studentFound = controller.student.value != null;
@@ -25,14 +25,15 @@ class LeaveView extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: AppColors.bgColor,
+            backgroundColor: theme.colorScheme.surface,
             elevation: 0,
             toolbarHeight: 80,
             title: _buildHeader(context),
             bottom: TabBar(
-              labelColor: AppColors.primaryColor,
-              unselectedLabelColor: AppColors.lightDark,
-              indicatorColor: AppColors.primaryColor,
+              labelColor: theme.colorScheme.secondary,
+              unselectedLabelColor:
+                  theme.colorScheme.onSurface.withOpacity(0.5),
+              indicatorColor: theme.colorScheme.secondary,
               dividerColor: Colors.transparent,
               indicatorWeight: 3.0,
               tabs: [
@@ -45,7 +46,7 @@ class LeaveView extends StatelessWidget {
           ),
           body: GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onTap: () => FocusScope.of(context).unfocus,
+            onTap: () => FocusScope.of(context).unfocus(),
             child: TabBarView(
               children: [
                 _buildLeaveApplicationTab(context, controller),
@@ -61,6 +62,7 @@ class LeaveView extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
+    final theme = Theme.of(context);
     return Row(
       children: [
         if (!isDesktop)
@@ -69,11 +71,10 @@ class LeaveView extends StatelessWidget {
             child: NeuButton(
               onTap: () => Scaffold.of(context).openDrawer(),
               width: 45,
-              child: const Icon(Icons.menu, color: AppColors.dark),
+              child: Icon(Icons.menu, color: theme.iconTheme.color),
             ),
           ),
-        Text('Leave Management',
-            style: Theme.of(context).textTheme.headlineMedium),
+        Text('Leave Management', style: theme.textTheme.headlineMedium),
       ],
     );
   }
@@ -182,12 +183,13 @@ class LeaveView extends StatelessWidget {
   }
 
   Widget _buildSearchCard(BuildContext context, LeaveController controller) {
+    final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Search Student", style: Theme.of(context).textTheme.titleLarge),
+          Text("Search Student", style: theme.textTheme.titleLarge),
           const SizedBox(height: 16),
           Wrap(
             spacing: 16,
@@ -223,6 +225,7 @@ class LeaveView extends StatelessWidget {
 
   Widget _buildLeaveApplicationCard(
       BuildContext context, LeaveController controller) {
+    final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -230,13 +233,13 @@ class LeaveView extends StatelessWidget {
         children: [
           Text(
             controller.student.value!.fullName.toCamelCase(),
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: theme.textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
-          _buildStudentDetailRow("Roll No", controller.student.value!.rollNo),
+          _buildStudentDetailRow(
+              "Roll No", controller.student.value!.rollNo, theme),
           const Divider(height: 32),
-          Text('Grant New Leave',
-              style: Theme.of(context).textTheme.titleLarge),
+          Text('Grant New Leave', style: theme.textTheme.titleLarge),
           const SizedBox(height: 16),
           Wrap(
             spacing: 16,
@@ -298,9 +301,9 @@ class LeaveView extends StatelessWidget {
     );
   }
 
-  /// A styled card for displaying a single leave record with actions.
   Widget _buildLeaveCard(BuildContext context, LeaveController controller,
       LeaveModel leave, bool isOngoing) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: NeuContainer(
@@ -321,19 +324,17 @@ class LeaveView extends StatelessWidget {
                           Text(
                               leave.studentData?.fullName.toCamelCase() ??
                                   "N/A",
-                              style: Theme.of(context).textTheme.titleMedium),
+                              style: theme.textTheme.titleMedium),
                         if (!isOngoing)
                           Text("LEAVE ID: ${leave.id.substring(0, 8)}...",
-                              style: Theme.of(context).textTheme.bodySmall),
+                              style: theme.textTheme.bodySmall),
                         if (isOngoing)
                           Text("Roll: ${leave.studentData?.rollNo ?? 'N/A'}",
-                              style: Theme.of(context).textTheme.bodyMedium),
+                              style: theme.textTheme.bodyMedium),
                       ],
                     ),
                   ),
-                  // --- NEW: ACTION MENU ---
-
-                  _buildActionMenu(context, controller, leave)
+                  _buildActionMenu(context, controller, leave, theme)
                 ],
               ),
               const Divider(height: 20),
@@ -341,15 +342,14 @@ class LeaveView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _DateDisplay(label: "From", date: leave.startDate),
-                  const Icon(Icons.arrow_forward,
-                      color: AppColors.primaryColor),
+                  Icon(Icons.arrow_forward, color: theme.colorScheme.secondary),
                   _DateDisplay(label: "To", date: leave.endDate),
                 ],
               ),
               if (leave.reason != null) ...[
                 const SizedBox(height: 8),
                 Text("Reason: ${leave.reason}",
-                    style: Theme.of(context).textTheme.bodySmall),
+                    style: theme.textTheme.bodySmall),
               ],
               const SizedBox(height: 8),
               Row(
@@ -358,7 +358,7 @@ class LeaveView extends StatelessWidget {
                 children: [
                   _StatusChip(status: leave.status),
                   Text('Applied: ${leave.createdAt.toString().toKolkataTime()}',
-                      style: Theme.of(context).textTheme.bodySmall),
+                      style: theme.textTheme.bodySmall),
                 ],
               ),
             ],
@@ -368,10 +368,10 @@ class LeaveView extends StatelessWidget {
     );
   }
 
-  /// Builds the three-dot menu for modifying or deleting a leave.
-  Widget _buildActionMenu(
-      BuildContext context, LeaveController controller, LeaveModel leave) {
+  Widget _buildActionMenu(BuildContext context, LeaveController controller,
+      LeaveModel leave, ThemeData theme) {
     return PopupMenuButton<String>(
+      color: theme.colorScheme.surface,
       onSelected: (value) {
         if (value == 'modify') {
           controller.showUpdateLeaveDialog(context, leave);
@@ -381,7 +381,8 @@ class LeaveView extends StatelessWidget {
             middleText: "Are you sure you want to delete this leave record?",
             textConfirm: "Delete",
             textCancel: "Cancel",
-            confirmTextColor: Colors.white,
+            confirmTextColor: theme.colorScheme.onSecondary,
+            buttonColor: theme.colorScheme.secondary,
             onConfirm: () {
               Get.back(); // Close the dialog
               controller.deleteLeave(leave.id);
@@ -411,7 +412,7 @@ class LeaveView extends StatelessWidget {
           ),
         ),
       ],
-      child: const Icon(Icons.more_vert),
+      child: Icon(Icons.more_vert, color: theme.iconTheme.color),
     );
   }
 
@@ -421,6 +422,7 @@ class LeaveView extends StatelessWidget {
     required ValueChanged<int> onPageChanged,
     required BuildContext context,
   }) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -434,7 +436,7 @@ class LeaveView extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text('Page $currentPage of $totalPages',
-              style: Theme.of(context).textTheme.bodyMedium),
+              style: theme.textTheme.bodyMedium),
         ),
         NeuButton(
           width: 50,
@@ -452,6 +454,7 @@ class LeaveView extends StatelessWidget {
   Widget _buildDatePickerButton(
       BuildContext context, LeaveController controller,
       {required bool isFromDate}) {
+    final theme = Theme.of(context);
     final dateValue =
         isFromDate ? controller.fromDate.value : controller.toDate.value;
     final text = isFromDate ? "From Date" : "To Date";
@@ -478,8 +481,8 @@ class LeaveView extends StatelessWidget {
       },
       child: Row(
         children: [
-          const Icon(Icons.calendar_today,
-              size: 20, color: AppColors.primaryColor),
+          Icon(Icons.calendar_today,
+              size: 20, color: theme.colorScheme.secondary),
           const SizedBox(width: 12),
           Text(formattedDate),
         ],
@@ -487,13 +490,15 @@ class LeaveView extends StatelessWidget {
     );
   }
 
-  Widget _buildStudentDetailRow(String label, String? value) {
+  Widget _buildStudentDetailRow(String label, String? value, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: Row(
         children: [
-          Text("$label: ", style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(value ?? 'N/A'),
+          Text("$label: ",
+              style: theme.textTheme.bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold)),
+          Text(value ?? 'N/A', style: theme.textTheme.bodyMedium),
         ],
       ),
     );
@@ -512,17 +517,17 @@ class _StatusChip extends StatelessWidget {
 
     switch (status) {
       case 'completed':
-        color = AppColors.success;
+        color = Colors.green;
         label = 'Completed';
         icon = Icons.check_circle;
         break;
       case 'ongoing':
-        color = AppColors.warning;
+        color = Colors.orange;
         label = 'Ongoing';
         icon = Icons.timelapse;
         break;
       default: // pending
-        color = AppColors.info;
+        color = Colors.blue;
         label = 'Pending';
         icon = Icons.hourglass_empty;
     }
@@ -551,14 +556,13 @@ class _DateDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
-        Text(label, style: Theme.of(context).textTheme.bodyMedium),
+        Text(label, style: theme.textTheme.bodyMedium),
         Text(
           DateFormat('dd MMM yyyy').format(date),
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
+          style: theme.textTheme.titleMedium
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
@@ -571,21 +575,23 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.person_search, size: 80, color: Colors.grey.shade400),
+            Icon(Icons.person_search,
+                size: 80, color: theme.colorScheme.onSurface.withOpacity(0.5)),
             const SizedBox(height: 16),
             Text('Search for a Student',
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: theme.textTheme.headlineSmall,
                 textAlign: TextAlign.center),
             const SizedBox(height: 8),
             Text(
               'Enter a student\'s roll number to view their details and manage their leaves.',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
           ],

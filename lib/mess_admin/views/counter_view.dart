@@ -6,7 +6,6 @@ import 'package:messcoin/mess_admin/controllers/dashboard_controller.dart';
 import 'package:messcoin/core/widgets/neu_button.dart';
 import 'package:messcoin/core/widgets/neu_loader.dart';
 
-import '../../config/app_colors.dart';
 import '../../utils/responsive.dart';
 
 class CounterView extends StatelessWidget {
@@ -32,7 +31,7 @@ class CounterView extends StatelessWidget {
                   child: NeuButton(
                       onTap: () => Scaffold.of(context).openDrawer(),
                       width: 45,
-                      child: Icon(Icons.menu, color: AppColors.dark, size: 24)),
+                      child: Icon(Icons.menu, size: 24)),
                 ),
               if (!isDesktop) const SizedBox(width: 16),
               Text('Counters',

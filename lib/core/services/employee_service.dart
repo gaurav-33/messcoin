@@ -37,6 +37,21 @@ class EmployeeService {
     }
   }
 
+  Future<ApiResponse> getMess() async {
+    try {
+      final response = await dio.get('/employee/mess');
+      if (response.statusCode! < 299) {
+        return ApiResponse.success(
+            response.data['message'], response.data, response.statusCode!);
+      } else {
+        return ApiResponse.error(
+            response.data['message'], response.statusCode!);
+      }
+    } catch (e) {
+      return ApiResponse.error(e.toString(), 500);
+    }
+  }
+
   Future<ApiResponse> refreshAccessToken() async {
     try {
       final response = await dio.get('/employee/refreshToken');

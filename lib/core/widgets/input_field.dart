@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
 
 class InputField extends StatefulWidget {
   const InputField({
     super.key,
-    required this.width,
+    this.width,
     this.height,
     this.label,
     this.hintText,
@@ -19,7 +18,7 @@ class InputField extends StatefulWidget {
   final String? label;
   final String? hintText;
   final String? prefixText;
-  final double width;
+  final double? width;
   final double? height;
   final bool? obscure;
   final int? maxLines;
@@ -43,55 +42,57 @@ class _InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.all(10),
         child: Text(
           widget.label ?? 'Label',
-          style: TextStyle(color: AppColors.dark, fontSize: 16),
+          style: theme.textTheme.bodyMedium,
         ),
       ),
       Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          margin: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          margin: const EdgeInsets.only(bottom: 10),
           height: widget.height ?? 60,
           width: widget.width,
           decoration: BoxDecoration(
-              color: AppColors.bgColor,
+              color: theme.colorScheme.background,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.darkShadowColor,
-                  offset: Offset(5, 5),
+                  color: theme.colorScheme.shadow,
+                  offset: const Offset(5, 5),
                   blurRadius: 10,
                 ),
                 BoxShadow(
-                  color: AppColors.lightShadowColor,
-                  offset: -Offset(5, 5),
+                  color: theme.colorScheme.onPrimary,
+                  offset: const Offset(-5, -5),
                   blurRadius: 10,
                 ),
               ]),
           child: Center(
             child: TextFormField(
               obscureText: isObscure,
-              cursorColor: AppColors.primaryColor,
+              cursorColor: theme.colorScheme.secondary,
               maxLines: widget.maxLines ?? 1,
               readOnly: widget.readOnly ?? false,
               onTap: widget.onTap,
               controller: widget.controller,
               keyboardType: widget.keyboardType ?? TextInputType.text,
+              style: theme.textTheme.bodyMedium,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: widget.hintText ?? 'Enter',
-                  hintStyle: TextStyle(color: AppColors.lightDark),
-                  contentPadding: EdgeInsets.symmetric(vertical: 18),
+                  hintStyle: theme.textTheme.bodySmall,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18),
                   prefixText: widget.prefixText,
-                  prefixStyle: TextStyle(color: AppColors.dark),
+                  prefixStyle: theme.textTheme.bodyMedium,
                   suffixIcon: (widget.obscure == true)
                       ? IconButton(
                           icon: Icon(
                             isObscure ? Icons.visibility_off : Icons.visibility,
-                            color: AppColors.dark,
+                            color: theme.iconTheme.color,
                           ),
                           onPressed: () {
                             setState(() {

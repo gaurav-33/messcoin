@@ -87,7 +87,7 @@ class WriteFeedbackView extends StatelessWidget {
           onTap: () => Get.toNamed(StudentRoutes.getFeedbackView()),
           child: Image.asset(
             'assets/images/view_all.png',
-            color: AppColors.dark,
+            color: Theme.of(context).colorScheme.primary,
             height: 24,
           ),
         ),

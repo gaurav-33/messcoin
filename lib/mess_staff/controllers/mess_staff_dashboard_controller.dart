@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
+import '../../core/services/employee_service.dart';
 
 import '../../core/models/mess_model.dart';
 import '../../core/routes/app_routes.dart';
-import '../../core/services/mess_service.dart';
 import '../../core/storage/auth_box_manager.dart';
 import '../../core/storage/role_box_manager.dart';
 import '../../utils/app_snackbar.dart';
@@ -17,7 +17,7 @@ class MessStaffDashboardController extends GetxController {
   }
 
   Future<void> fetchMessDetails() async {
-    final response = await MessService().getMess();
+    final response = await EmployeeService().getMess();
     if (response.isSuccess) {
       messDetail.value = MessModel.fromJson(response.data['data']);
     } else {

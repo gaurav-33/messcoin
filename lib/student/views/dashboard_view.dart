@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../config/app_colors.dart';
 import '../../core/routes/student_routes.dart';
 import '../../core/widgets/app_bar.dart';
 import '../../core/widgets/neu_button.dart';
@@ -36,7 +35,7 @@ class DashboradView extends StatelessWidget {
     final DashboardController controller = Get.put(DashboardController());
     Get.put(MessMenuController(), permanent: true);
     final screenHeight = MediaQuery.of(context).size.height;
-
+    final theme = Theme.of(context);
     const double horizontalPadding = 16.0;
 
     final List<_GridItem> gridItems = [
@@ -46,7 +45,7 @@ class DashboradView extends StatelessWidget {
           onTap: () => Get.toNamed(StudentRoutes.getPayment()),
           circle: true,
           isSpecial: true,
-          color: AppColors.primaryColor),
+          color: theme.colorScheme.secondary),
       _GridItem(
           image: 'assets/images/coupon.png',
           title: 'Coupons',
@@ -82,13 +81,13 @@ class DashboradView extends StatelessWidget {
           image: 'assets/images/bill.png',
           title: 'Bill',
           onTap: () => Get.toNamed(StudentRoutes.getBill()),
-          circle:true
-          ),
+          circle: true),
       _GridItem(
-          image: 'assets/images/logout.png',
-          title: 'Logout',
-          onTap: () => controller.logout(),
-          color: AppColors.primaryColor.withOpacity(0.6),),
+        image: 'assets/images/logout.png',
+        title: 'Logout',
+        onTap: () => controller.logout(),
+        color: theme.colorScheme.error,
+      ),
     ];
 
     return Scaffold(
@@ -228,6 +227,7 @@ class NeuTileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
       width: size + 10,
       child: Column(
@@ -242,7 +242,7 @@ class NeuTileButton extends StatelessWidget {
             child: Image.asset(
               image,
               height: circle == true && isSpecial == true ? size : size * 0.7,
-              color: color ?? AppColors.dark,
+              color: color ?? theme.colorScheme.primary,
             ),
           ),
           if (title != null && title!.isNotEmpty)

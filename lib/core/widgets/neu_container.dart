@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
 
 class NeuContainer extends StatelessWidget {
   const NeuContainer({
@@ -23,6 +22,7 @@ class NeuContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       constraints: constraints,
       height: height,
@@ -30,18 +30,18 @@ class NeuContainer extends StatelessWidget {
       margin: margin,
       padding: padding ?? const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-          color: AppColors.bgColor,
+          color: theme.colorScheme.surface,
           borderRadius: shape != null ? null : BorderRadius.circular(25),
           shape: shape ?? BoxShape.rectangle,
           boxShadow: [
             BoxShadow(
-              color: AppColors.darkShadowColor,
-              offset: Offset(5, 5),
+              color: theme.colorScheme.shadow,
+              offset: const Offset(5, 5),
               blurRadius: 15,
             ),
             BoxShadow(
-              color: AppColors.lightShadowColor,
-              offset: -Offset(5, 5),
+              color: theme.colorScheme.onPrimary,
+              offset: const Offset(-5, -5),
               blurRadius: 15,
             ),
           ]),

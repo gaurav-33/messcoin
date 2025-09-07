@@ -7,7 +7,7 @@ import 'package:messcoin/utils/responsive.dart';
 import '../../core/widgets/app_bar.dart';
 
 class BillExportView extends StatelessWidget {
-  const BillExportView({Key? key}) : super(key: key);
+  const BillExportView({super.key});
 
   @override
   Widget build(BuildContext context) {

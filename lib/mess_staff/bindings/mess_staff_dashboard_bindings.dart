@@ -7,7 +7,7 @@ class MessStaffDashboardBindings extends Bindings {
   @override
   void dependencies() async {
     Get.put(MessStaffDashboardController());
-    await SocketManager().init();
     Get.put(MessStaffTransactionsController());
+    await SocketManager().init();
   }
 }

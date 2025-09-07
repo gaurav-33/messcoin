@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/hmc/controllers/hmc_student_search_controller.dart';
 import 'package:messcoin/utils/extensions.dart';
-import '../../config/app_colors.dart';
 import '../../core/models/student_model.dart';
 import '../../core/widgets/input_field.dart';
 import '../../core/widgets/neu_button.dart';
@@ -24,7 +23,7 @@ class StudentSearchView extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -106,17 +105,18 @@ class StudentSearchView extends StatelessWidget {
 
   /// Header containing the title and menu button.
   Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         const SizedBox(
           height: 10,
         ),
-        NeuAppBar(
+        const NeuAppBar(
           toBack: true,
         ),
         const SizedBox(height: 24),
         Text('Student Information',
-            style: Theme.of(context).textTheme.headlineMedium),
+            style: theme.textTheme.headlineMedium),
       ],
     );
   }
@@ -124,13 +124,14 @@ class StudentSearchView extends StatelessWidget {
   /// A card containing the student search functionality.
   Widget _buildSearchCard(
       BuildContext context, StudentSearchController controller) {
+    final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Find Student by Roll Number",
-              style: Theme.of(context).textTheme.titleLarge),
+              style: theme.textTheme.titleLarge),
           const SizedBox(height: 16),
           Wrap(
             spacing: 16,
@@ -165,22 +166,23 @@ class StudentSearchView extends StatelessWidget {
 
   /// A detailed card displaying the student's profile information.
   Widget _buildProfileCard(BuildContext context, StudentModel student) {
+    final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildProfileHeader(context, student),
+          _buildProfileHeader(context, student, theme),
           const Divider(height: 32),
           _buildDetailSection(title: "Contact Information", children: [
-            _buildDetailRow("Email:", student.email),
+            _buildDetailRow("Email:", student.email, theme),
           ]),
           const SizedBox(height: 16),
           _buildDetailSection(title: "Academic Details", children: [
-            _buildDetailRow("Roll No:", student.rollNo),
-            _buildDetailRow("Room No:", student.roomNo),
-            _buildDetailRow("Hostel:", student.mess.hostel.toCamelCase()),
-            _buildDetailRow("Semester:", student.semester.toString()),
+            _buildDetailRow("Roll No:", student.rollNo, theme),
+            _buildDetailRow("Room No:", student.roomNo, theme),
+            _buildDetailRow("Hostel:", student.mess.hostel.toCamelCase(), theme),
+            _buildDetailRow("Semester:", student.semester.toString(), theme),
           ]),
         ],
       ),
@@ -188,7 +190,7 @@ class StudentSearchView extends StatelessWidget {
   }
 
   /// The header section of the profile card.
-  Widget _buildProfileHeader(BuildContext context, StudentModel student) {
+  Widget _buildProfileHeader(BuildContext context, StudentModel student, ThemeData theme) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -200,7 +202,7 @@ class StudentSearchView extends StatelessWidget {
             child: ClipOval(
               child: FadeInImage(
                 image: NetworkImage(student.imageUrl),
-                placeholder: AssetImage('assets/images/profile.png'),
+                placeholder: const AssetImage('assets/images/profile.png'),
                 fit: BoxFit.cover,
                 imageErrorBuilder: (context, error, stackTrace) => Image.asset(
                   'assets/images/profile.png',
@@ -219,15 +221,13 @@ class StudentSearchView extends StatelessWidget {
             children: [
               Text(
                 student.fullName.toCamelCase(),
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: theme.textTheme.headlineSmall,
               ),
               const SizedBox(height: 4),
               Text(
                 'Mess: ${student.mess.name.toCamelCase()}',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(color: AppColors.primaryColor),
+                style: theme.textTheme.titleSmall
+                    ?.copyWith(color: theme.colorScheme.secondary),
               ),
               const SizedBox(height: 8),
               _StatusChips(
@@ -242,11 +242,12 @@ class StudentSearchView extends StatelessWidget {
   /// A generic section with a title and list of detail rows.
   Widget _buildDetailSection(
       {required String title, required List<Widget> children}) {
+    final theme = Theme.of(Get.context!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         ...children,
       ],
@@ -254,14 +255,14 @@ class StudentSearchView extends StatelessWidget {
   }
 
   /// A simple row for displaying a label and a value.
-  Widget _buildDetailRow(String label, String? value) {
+  Widget _buildDetailRow(String label, String? value, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("$label ", style: const TextStyle(fontWeight: FontWeight.w500)),
-          Expanded(child: Text(value ?? 'N/A')),
+          Text("$label ", style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+          Expanded(child: Text(value ?? 'N/A', style: theme.textTheme.bodyMedium)),
         ],
       ),
     );
@@ -269,28 +270,29 @@ class StudentSearchView extends StatelessWidget {
 
   /// A card dedicated to showing the student's wallet balance.
   Widget _buildWalletCard(BuildContext context, StudentModel student) {
+    final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Wallet Details",
-              style: Theme.of(context).textTheme.headlineSmall),
+              style: theme.textTheme.headlineSmall),
           const SizedBox(height: 16),
           _buildWalletItem("Current Balance", student.wallet.balance,
-              isLarge: true),
+              isLarge: true, theme: theme),
           const Divider(height: 24),
-          _buildWalletItem("Total Credit", student.wallet.totalCredit),
-          _buildWalletItem("Used Credit", student.wallet.loadedCredit),
+          _buildWalletItem("Total Credit", student.wallet.totalCredit, theme: theme),
+          _buildWalletItem("Used Credit", student.wallet.loadedCredit, theme: theme),
           _buildWalletItem("Credit Left",
-              (student.wallet.totalCredit - student.wallet.loadedCredit)),
-          _buildWalletItem("Left Over Credit", student.wallet.leftOverCredit),
+              (student.wallet.totalCredit - student.wallet.loadedCredit), theme: theme),
+          _buildWalletItem("Left Over Credit", student.wallet.leftOverCredit, theme: theme),
         ],
       ),
     );
   }
 
-  Widget _buildWalletItem(String name, num value, {bool isLarge = false}) {
+  Widget _buildWalletItem(String name, num value, {bool isLarge = false, required ThemeData theme}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
@@ -306,7 +308,7 @@ class StudentSearchView extends StatelessWidget {
             '₹${value.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: isLarge ? 20 : 16,
-              color: isLarge ? AppColors.primaryColor : AppColors.dark,
+              color: isLarge ? theme.colorScheme.secondary : theme.colorScheme.onSurface,
               fontWeight: FontWeight.bold,
               fontFamily: 'FiraCode',
             ),
@@ -332,12 +334,12 @@ class _StatusChips extends StatelessWidget {
       children: [
         _StatusChip(
           label: isVerified ? 'Verified' : 'Unverified',
-          color: isVerified ? AppColors.success : AppColors.error,
+          color: isVerified ? Colors.green : Colors.red,
           icon: isVerified ? Icons.check_circle : Icons.error_outline,
         ),
         _StatusChip(
           label: isActive ? 'Active' : 'Inactive',
-          color: isActive ? AppColors.success : AppColors.error,
+          color: isActive ? Colors.green : Colors.red,
           icon: isActive ? Icons.power_settings_new : Icons.block,
         ),
       ],
@@ -380,21 +382,22 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.person_search, size: 80, color: Colors.grey.shade400),
+            Icon(Icons.person_search, size: 80, color: theme.colorScheme.onSurface.withOpacity(0.5)),
             const SizedBox(height: 16),
             Text('Search for a Student',
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: theme.textTheme.headlineSmall,
                 textAlign: TextAlign.center),
             const SizedBox(height: 8),
             Text(
               'Enter a student\'s roll number to view their profile and wallet information.',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
           ],

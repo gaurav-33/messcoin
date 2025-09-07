@@ -72,7 +72,6 @@ class DashboardWidget extends StatelessWidget {
                       width: 45,
                       child: Icon(
                         Icons.menu,
-                        color: AppColors.dark,
                       )),
                 ),
               if (!isDesktop)

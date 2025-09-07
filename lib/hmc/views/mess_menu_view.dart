@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/hmc/controllers/hmc_mess_menu_controller.dart';
-import '../../config/app_colors.dart';
 import '../../core/widgets/neu_button.dart';
 import '../../core/widgets/neu_container.dart';
 import '../../core/widgets/neu_loader.dart';
@@ -24,6 +23,7 @@ class MessMenuView extends StatelessWidget {
       containerWidth = 700;
     }
     final HmcMessMenuController controller = Get.find<HmcMessMenuController>();
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -36,7 +36,7 @@ class MessMenuView extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  NeuAppBar(
+                  const NeuAppBar(
                     toBack: true,
                   ),
                   SizedBox(height: height * 0.03),
@@ -53,10 +53,11 @@ class MessMenuView extends StatelessWidget {
                         onTap: () {
                           controller.selectedDayIndex.value = index;
                         },
+                        invert: isSelected,
                         child: Text(
                           controller.days[index].substring(0, 3),
                           style: TextStyle(
-                            color: isSelected ? AppColors.primaryColor : null,
+                            color: isSelected ? theme.colorScheme.onSecondary : theme.colorScheme.onSurface,
                             fontWeight: isSelected
                                 ? FontWeight.bold
                                 : FontWeight.normal,
@@ -67,7 +68,7 @@ class MessMenuView extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.03),
                   controller.isLoading.value
-                      ? NeuLoader()
+                      ? const NeuLoader()
                       : Container(
                           width: containerWidth,
                           padding: const EdgeInsets.all(16),
@@ -80,20 +81,18 @@ class MessMenuView extends StatelessWidget {
                                     Center(
                                       child: Text(
                                         'Mess Menu - $dayName',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium,
+                                        style: theme.textTheme.headlineMedium,
                                       ),
                                     ),
-                                    SizedBox(height: 16),
+                                    const SizedBox(height: 16),
                                     buildMealSection(context, 'Breakfast',
-                                        menu.breakfast?.items, containerWidth),
+                                        menu.breakfast?.items, containerWidth, theme),
                                     buildMealSection(context, 'Lunch',
-                                        menu.lunch?.items, containerWidth),
+                                        menu.lunch?.items, containerWidth, theme),
                                     buildMealSection(context, 'Snacks',
-                                        menu.snacks?.items, containerWidth),
+                                        menu.snacks?.items, containerWidth, theme),
                                     buildMealSection(context, 'Dinner',
-                                        menu.dinner?.items, containerWidth),
+                                        menu.dinner?.items, containerWidth, theme),
                                   ],
                                 ),
                         ),
@@ -108,8 +107,8 @@ class MessMenuView extends StatelessWidget {
   }
 
   Widget buildMealSection(
-      BuildContext context, String meal, List<String>? items, double width) {
-    if (items == null) return SizedBox.shrink();
+      BuildContext context, String meal, List<String>? items, double width, ThemeData theme) {
+    if (items == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Center(
@@ -119,18 +118,18 @@ class MessMenuView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(meal, style: Theme.of(context).textTheme.titleMedium),
+              Text(meal, style: theme.textTheme.titleMedium),
               const SizedBox(height: 8),
               ...items.map((item) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2.0),
                     child: Row(
                       children: [
                         Icon(Icons.circle,
-                            size: 8, color: AppColors.primaryColor),
+                            size: 8, color: theme.colorScheme.secondary),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(item,
-                              style: Theme.of(context).textTheme.bodyMedium),
+                              style: theme.textTheme.bodyMedium),
                         ),
                       ],
                     ),

@@ -45,8 +45,7 @@ class StudentView extends StatelessWidget {
                 behavior: HitTestBehavior.translucent,
                 onTap: FocusScope.of(context).unfocus,
                 child: Obx(() {
-                  if (controller.isLoading.value &&
-                      controller.student.value == null) {
+                  if (controller.isLoading.value) {
                     return const Center(
                         child: Padding(
                             padding: EdgeInsets.all(32.0), child: NeuLoader()));
@@ -191,7 +190,9 @@ class StudentView extends StatelessWidget {
             child: NeuButton(
               onTap: () => Scaffold.of(context).openDrawer(),
               width: 45,
-              child: const Icon(Icons.menu, color: AppColors.dark),
+              child: const Icon(
+                Icons.menu,
+              ),
             ),
           ),
         Text('Student Information',
@@ -257,7 +258,8 @@ class StudentView extends StatelessWidget {
           _buildDetailSection(title: "Academic Details", children: [
             _buildDetailRow("Roll No:", student.rollNo),
             _buildDetailRow("Room No:", student.roomNo),
-            _buildDetailRow("Hostel:", student.mess.hostel.toCamelCase()),
+            _buildDetailRow(
+                "Hostel:", student.mess.hostel.toCamelCase()),
             _buildDetailRow("Semester:", student.semester.toString()),
           ]),
         ],
@@ -384,7 +386,7 @@ class StudentView extends StatelessWidget {
             '₹${value.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: isLarge ? 20 : 16,
-              color: isLarge ? AppColors.primaryColor : AppColors.dark,
+              color: isLarge ? AppColors.primaryColor : null,
               fontWeight: FontWeight.bold,
               fontFamily: 'FiraCode',
             ),

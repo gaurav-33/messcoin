@@ -14,6 +14,10 @@ class AppTheme {
         background: AppColors.bgColor,
         onBackground: AppColors.dark,
         error: AppColors.error,
+        shadow: AppColors.darkShadowColor,
+        onPrimary: AppColors.lightShadowColor,
+        tertiary: AppColors.black,
+        onTertiary: AppColors.lightDark
       ),
       iconTheme: const IconThemeData(
         color: AppColors.lightDark,
@@ -124,6 +128,128 @@ class AppTheme {
             fontSize: 16,
           ),
           bodySmall: TextStyle(color: AppColors.dark, fontSize: 12)),
+    );
+  }
+
+  static ThemeData get darkTheme {
+    return ThemeData(
+      scaffoldBackgroundColor: AppColors.darkBgColor,
+      fontFamily: 'Poppins',
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.neutralLight,
+        secondary: AppColors.darkPrimaryColor,
+        surface: AppColors.darkBgColor,
+        onSurface: AppColors.neutralLight,
+        background: AppColors.darkBgColor,
+        onBackground: AppColors.neutralLight,
+        error: AppColors.error,
+        shadow: AppColors.darkDarkShadowColor,
+        onPrimary: AppColors.darkLightShadowColor,
+        tertiary: AppColors.neutralLight,
+        onTertiary: AppColors.neutralDark
+      ),
+      iconTheme: const IconThemeData(
+        color: AppColors.neutralLight,
+        size: 24,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: AppColors.darkPrimaryColor.withOpacity(0.3),
+        cursorColor: AppColors.darkPrimaryColor,
+        selectionHandleColor: AppColors.darkPrimaryColor,
+      ),
+      dividerTheme: DividerThemeData(color: AppColors.darkDarkShadowColor),
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: AppColors.darkPrimaryColor,
+        headerForegroundColor: Colors.white,
+        backgroundColor: AppColors.darkBgColor,
+        dayBackgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.darkPrimaryColor;
+          }
+          return null;
+        }),
+        dayForegroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.white;
+          }
+          return AppColors.neutralLight;
+        }),
+        yearBackgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.darkPrimaryColor;
+          }
+          return null;
+        }),
+        yearForegroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.white;
+          }
+          return AppColors.neutralLight;
+        }),
+        dayStyle: const TextStyle(color: AppColors.neutralLight),
+        weekdayStyle: const TextStyle(color: AppColors.neutralLight),
+        headerHelpStyle: const TextStyle(color: Colors.white),
+        headerHeadlineStyle: const TextStyle(color: Colors.white),
+      ),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.w700,
+          color: AppColors.neutralLight,
+          shadows: [
+            Shadow(
+              color: AppColors.darkLightShadowColor,
+              blurRadius: 15,
+              offset: Offset(-5, -5),
+            ),
+            Shadow(
+              color: AppColors.darkDarkShadowColor,
+              blurRadius: 15,
+              offset: Offset(3, 3),
+            ),
+          ],
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.w500,
+          color: AppColors.neutralLight,
+          shadows: [
+            Shadow(
+              color: AppColors.darkLightShadowColor,
+              blurRadius: 15,
+              offset: Offset(-3, -3),
+            ),
+            Shadow(
+              color: AppColors.darkDarkShadowColor,
+              blurRadius: 15,
+              offset: Offset(3, 3),
+            ),
+          ],
+        ),
+        headlineSmall: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w500,
+          color: AppColors.neutralLight,
+        ),
+        titleLarge: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w500,
+          color: AppColors.darkPrimaryColor,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: AppColors.darkPrimaryColor,
+        ),
+        bodyMedium: TextStyle(
+          color: AppColors.neutralLight,
+          fontSize: 16,
+        ),
+        bodySmall: TextStyle(
+          color: AppColors.neutralLight,
+          fontSize: 12,
+        ),
+      ),
     );
   }
 }

@@ -109,7 +109,7 @@ class ReportView extends StatelessWidget {
             child: NeuButton(
               onTap: () => Scaffold.of(context).openDrawer(),
               width: 45,
-              child: const Icon(Icons.menu, color: AppColors.dark),
+              child: const Icon(Icons.menu,),
             ),
           ),
         Text('Financial Reports',
@@ -121,6 +121,7 @@ class ReportView extends StatelessWidget {
   /// A header row with the period toggle, data view toggle, and export button.
   Widget _buildControlsHeader(
       BuildContext context, ReportController controller) {
+      final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(16),
       child: Wrap(
@@ -139,10 +140,7 @@ class ReportView extends StatelessWidget {
               Obx(() => SegmentedButton<ReportPeriod>(
                     showSelectedIcon: false,
                     style: SegmentedButton.styleFrom(
-                      backgroundColor: AppColors.bgColor,
-                      foregroundColor: AppColors.dark,
-                      selectedForegroundColor: Colors.white,
-                      selectedBackgroundColor: AppColors.primaryColor,
+                      selectedForegroundColor: theme.colorScheme.surface,
                     ),
                     onSelectionChanged: (newSelection) {
                       controller.togglePeriod(newSelection.first);
@@ -161,10 +159,7 @@ class ReportView extends StatelessWidget {
               Obx(() => SegmentedButton<DataViewType>(
                     showSelectedIcon: false,
                     style: SegmentedButton.styleFrom(
-                      backgroundColor: AppColors.bgColor,
-                      foregroundColor: AppColors.dark,
-                      selectedForegroundColor: Colors.white,
-                      selectedBackgroundColor: AppColors.primaryColor,
+                      selectedForegroundColor: theme.colorScheme.surface
                     ),
                     onSelectionChanged: controller.toggleDataView,
                     segments: const [

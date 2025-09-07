@@ -174,8 +174,7 @@ class ViewFeedbackView extends StatelessWidget {
                 ? () => controller.fetchFeedbackList(
                     page: controller.currentPage.value - 1)
                 : null,
-            child:
-                Icon(Icons.keyboard_arrow_left_rounded, color: AppColors.dark),
+            child: Icon(Icons.keyboard_arrow_left_rounded),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -192,8 +191,7 @@ class ViewFeedbackView extends StatelessWidget {
                 ? () => controller.fetchFeedbackList(
                     page: controller.currentPage.value + 1)
                 : null,
-            child:
-                Icon(Icons.keyboard_arrow_right_rounded, color: AppColors.dark),
+            child: Icon(Icons.keyboard_arrow_right_rounded),
           ),
         ],
       ),

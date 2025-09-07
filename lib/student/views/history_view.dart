@@ -106,11 +106,7 @@ class HistoryView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: AppColors.neutralDark)),
+                    Text(title, style: Theme.of(context).textTheme.bodyMedium),
                     const SizedBox(height: 4),
                     Text(
                       item.updatedAt.toString().toKolkataTime(),
@@ -139,6 +135,7 @@ class HistoryView extends StatelessWidget {
   void _showDetailsDialog(
       BuildContext context, dynamic item, HistoryController controller) {
     final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
     final bool isTransaction = item is TransactionModel;
 
@@ -153,7 +150,7 @@ class HistoryView extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: screenHeight * 0.8),
               child: Container(
-                color: AppColors.bgColor,
+                color: theme.colorScheme.surface,
                 width: Responsive.contentWidth(context),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -166,7 +163,7 @@ class HistoryView extends StatelessWidget {
                         isTransaction
                             ? Icons.receipt_long
                             : Icons.confirmation_number_outlined,
-                        color: AppColors.primaryColor,
+                        color: theme.colorScheme.secondary,
                         size: 60,
                       ),
                       const SizedBox(height: 16),
@@ -276,7 +273,6 @@ class HistoryView extends StatelessWidget {
     );
   }
 
-
   Widget _buildItemRow(BuildContext context, TransactionModel txn) {
     final textTheme = Theme.of(context).textTheme;
     return Column(
@@ -306,7 +302,10 @@ class HistoryView extends StatelessWidget {
             ),
           ],
         ),
-        const Divider(height: 12),
+        Divider(
+          height: 12,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -332,7 +331,6 @@ class HistoryView extends StatelessWidget {
     );
   }
 
-  
   Widget _buildDetailRow(BuildContext context, String title, String value,
       {bool isAmount = false, Color? color, bool isSelectable = false}) {
     return Padding(

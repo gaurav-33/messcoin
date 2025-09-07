@@ -4,7 +4,6 @@ import 'package:messcoin/core/models/transaction_model.dart';
 import 'package:messcoin/mess_admin/controllers/dashboard_controller.dart';
 import '../../core/widgets/neu_button.dart';
 import '../../core/widgets/neu_container.dart';
-import '../../config/app_colors.dart';
 import '../../core/widgets/neu_loader.dart';
 import '../../mess_admin/controllers/transaction_controller.dart';
 import '../../utils/extensions.dart';
@@ -18,6 +17,7 @@ class TransactionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final TransactionController controller = Get.find<TransactionController>();
     final bool isDesktop = Responsive.isDesktop(context);
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -33,11 +33,11 @@ class TransactionView extends StatelessWidget {
                   child: NeuButton(
                       onTap: () => Scaffold.of(context).openDrawer(),
                       width: 45,
-                      child: Icon(Icons.menu, color: AppColors.dark, size: 24)),
+                      child: Icon(Icons.menu, size: 24, color: theme.iconTheme.color)),
                 ),
               if (!isDesktop) const SizedBox(width: 16),
               Text('Transactions',
-                  style: Theme.of(context).textTheme.headlineMedium),
+                  style: theme.textTheme.headlineMedium),
               const SizedBox(width: 12),
               // ⭐️ UPDATE LIVE STATUS DISPLAY
               Obx(() {
@@ -50,7 +50,7 @@ class TransactionView extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       controller.liveStatusText, // Use new getter
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      style: theme.textTheme.bodySmall?.copyWith(
                             color: controller.isLive.value
                                 ? Colors.green
                                 : Colors.red,
@@ -82,13 +82,11 @@ class TransactionView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.calendar_today,
-                          size: 20, color: AppColors.primaryColor),
+                          size: 20, color: theme.colorScheme.secondary),
                       const SizedBox(width: 8),
                       Text(
                         controller.selectedDate,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
+                        style: theme.textTheme.bodyMedium
                             ?.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ],
@@ -100,7 +98,7 @@ class TransactionView extends StatelessWidget {
                 height: 40,
                 shape: BoxShape.circle,
                 onTap: () => controller.fetchTransactions(),
-                child: Icon(Icons.refresh, color: AppColors.primaryColor),
+                child: Icon(Icons.refresh, color: theme.colorScheme.secondary),
               ),
             ],
           ),
@@ -128,7 +126,7 @@ class TransactionView extends StatelessWidget {
                     controller.isLoading.value
                         ? 'Loading...'
                         : 'No transactions found for this ${controller.selectedMealType.value.name.toCamelCase()}.',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: theme.textTheme.bodyMedium,
                   ),
                 );
               }
@@ -169,6 +167,7 @@ class TransactionView extends StatelessWidget {
 
   Widget _buildCounterFilter(
       BuildContext context, TransactionController controller) {
+    final theme = Theme.of(context);
     return Obx(() {
       return Wrap(
         spacing: 16,
@@ -185,8 +184,8 @@ class TransactionView extends StatelessWidget {
             width: 40,
             child: Text(
               '$counter',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isSelected ? AppColors.bgColor : AppColors.dark,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                    color: isSelected ? theme.colorScheme.onSecondary : theme.colorScheme.onSurface,
                     fontWeight:
                         isSelected ? FontWeight.w500 : FontWeight.normal,
                   ),
@@ -200,6 +199,7 @@ class TransactionView extends StatelessWidget {
   // ⭐️ ADD THIS NEW WIDGET FOR MEAL FILTERS
   Widget _buildMealFilter(
       BuildContext context, TransactionController controller) {
+    final theme = Theme.of(context);
     return Obx(
       () => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -216,7 +216,7 @@ class TransactionView extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
                 child: NeuButton(
                   onTap: () => controller.changeMealType(meal),
-                  // color: isSelected ? AppColors.primaryColor : AppColors.bgColor,
+                  invert: isSelected,
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -226,8 +226,8 @@ class TransactionView extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: isSelected
-                            ? AppColors.primaryColor
-                            : AppColors.neutralDark,
+                            ? theme.colorScheme.onSecondary
+                            : theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -242,7 +242,7 @@ class TransactionView extends StatelessWidget {
 
   // A more advanced tile for displaying transaction info to the admin.
   Widget _buildTransactionTile(BuildContext context, TransactionModel txn) {
-    // ... no changes needed here
+    final theme = Theme.of(context);
     return NeuContainer(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -253,43 +253,41 @@ class TransactionView extends StatelessWidget {
             children: [
               Text(
                 '₹ ${txn.amount.toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: AppColors.primaryColor,
+                style: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'FiraCode',
                     ),
               ),
               Text(
                 txn.createdAt.toString().toKolkataTime(),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium,
               ),
             ],
           ),
           Divider(
-            color: AppColors.darkShadowColor,
+            color: theme.dividerColor,
           ),
 
           /// Student Info
           Text(
             txn.studentData?.fullName.toCamelCase() ?? 'Unknown Student',
-            style: Theme.of(context).textTheme.titleMedium,
+            style: theme.textTheme.titleMedium,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
           Text(
             'Roll: ${txn.studentData?.rollNo ?? 'N/A'}',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: theme.textTheme.bodySmall,
           ),
           const SizedBox(height: 2),
           Row(
             children: [
-              Text('Txn ID: ', style: Theme.of(context).textTheme.bodySmall),
+              Text('Txn ID: ', style: theme.textTheme.bodySmall),
               Expanded(
                 child: SelectableText(
                   txn.transactionId,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
+                  style: theme.textTheme.bodySmall
                       ?.copyWith(fontFamily: 'FiraCode'),
                 ),
               ),
@@ -302,7 +300,8 @@ class TransactionView extends StatelessWidget {
 
   /// Shows a detailed bill/receipt for a single transaction.
   void _showTransactionBill(BuildContext context, TransactionModel item) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     showDialog(
       context: context,
@@ -314,14 +313,14 @@ class TransactionView extends StatelessWidget {
             clipper: ReceiptClipper(),
             child: Container(
               width: Responsive.contentWidth(context),
-              color: AppColors.bgColor,
+              color: theme.colorScheme.surface,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.receipt_long,
-                        color: AppColors.primaryColor, size: 60),
+                    Icon(Icons.receipt_long,
+                        color: theme.colorScheme.secondary, size: 60),
                     const SizedBox(height: 16),
                     Text('Transaction Receipt', style: textTheme.headlineSmall),
                     const SizedBox(height: 24),
@@ -363,8 +362,8 @@ class TransactionView extends StatelessWidget {
                     NeuButton(
                       shape: BoxShape.circle,
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.close_rounded,
-                          color: AppColors.lightDark),
+                      child: Icon(Icons.close_rounded,
+                          color: theme.iconTheme.color),
                     ),
                   ],
                 ),
@@ -379,7 +378,8 @@ class TransactionView extends StatelessWidget {
   /// Helper to show a row in the receipt (e.g., "Billed To:", "John Doe").
   Widget _buildDetailRow(BuildContext context, String title, String value,
       {bool isAmount = false, bool isSelectable = false}) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
@@ -401,10 +401,10 @@ class TransactionView extends StatelessWidget {
                     textAlign: TextAlign.end,
                     style: isAmount
                         ? textTheme.headlineSmall?.copyWith(
-                            color: AppColors.primaryColor,
+                            color: theme.colorScheme.secondary,
                             fontWeight: FontWeight.bold)
                         : textTheme.bodyLarge?.copyWith(
-                            color: AppColors.dark, fontWeight: FontWeight.w500),
+                            color: theme.colorScheme.onSurface, fontWeight: FontWeight.w500),
                   ),
           ),
         ],
@@ -414,7 +414,8 @@ class TransactionView extends StatelessWidget {
 
   /// Helper to show the purchased item row in the receipt.
   Widget _buildItemRow(BuildContext context, TransactionModel txn) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     return Column(
       children: [
         Row(
@@ -468,6 +469,7 @@ class TransactionView extends StatelessWidget {
   /// Builds the pagination buttons at the bottom.
   Widget _buildPaginationControls(
       BuildContext context, TransactionController controller) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -486,9 +488,7 @@ class TransactionView extends StatelessWidget {
           const SizedBox(width: 16),
           Text(
             'Page ${controller.currentPage} of ${controller.totalPages}',
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
+            style: theme.textTheme.bodyLarge
                 ?.copyWith(fontWeight: FontWeight.bold, fontFamily: 'FiraCode'),
           ),
           const SizedBox(width: 16),
@@ -524,9 +524,10 @@ class DashedLine extends StatelessWidget {
 class DashedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final theme = Theme.of(Get.context!);
     double dashWidth = 5, dashSpace = 5, startX = 0;
     final paint = Paint()
-      ..color = AppColors.lightDark.withOpacity(0.5)
+      ..color = theme.dividerColor
       ..strokeWidth = 1;
     while (startX < size.width) {
       canvas.drawLine(Offset(startX, 0), Offset(startX + dashWidth, 0), paint);

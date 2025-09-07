@@ -62,7 +62,7 @@ class EmployeeLoginView extends StatelessWidget {
               SizedBox(height: Get.height * 0.04),
               Obx(
                 () => NeuButton(
-                  width: Responsive.contentWidth(context) * 0.5,
+                  width: Responsive.contentWidth(context) * 0.3,
                   height: 50,
                   onTap: () {
                     controller.login();

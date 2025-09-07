@@ -97,6 +97,7 @@ class PaymentView extends StatelessWidget {
 
   Widget _buildCounterSelector(
       BuildContext context, PaymentController controller) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Text(
@@ -121,7 +122,9 @@ class PaymentView extends StatelessWidget {
                 child: Text(
                   '$counter',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: isSelected ? AppColors.bgColor : AppColors.dark,
+                        color: isSelected
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.primary,
                         fontWeight:
                             isSelected ? FontWeight.w500 : FontWeight.normal,
                       ),

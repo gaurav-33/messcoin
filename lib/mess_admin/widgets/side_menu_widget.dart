@@ -4,7 +4,6 @@ import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/core/widgets/neu_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:messcoin/utils/responsive.dart';
-import '../../config/app_colors.dart';
 import '../../mess_admin/controllers/dashboard_controller.dart';
 import '../../mess_admin/widgets/side_menu_data.dart';
 
@@ -14,13 +13,14 @@ class SideMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final menuData = SideMenuData().menu;
+    final theme = Theme.of(context);
 
     final DashboardController controller = Get.find<DashboardController>();
 
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.bgColor,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(25),
         ),
         child: Padding(
@@ -28,7 +28,7 @@ class SideMenuWidget extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                NeuAppBar(),
+                const NeuAppBar(),
                 const SizedBox(
                   height: 50,
                 ),
@@ -44,9 +44,9 @@ class SideMenuWidget extends StatelessWidget {
                           child: NeuButton(
                             invert: isSelected,
                             invertColor:
-                                isSelected ? AppColors.lightDark : null,
+                                isSelected ? theme.colorScheme.secondary : null,
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             onTap: () {
                               controller.selectedIndex = index;
                               menu.onTap();
@@ -60,10 +60,10 @@ class SideMenuWidget extends StatelessWidget {
                                 SvgPicture.asset(
                                   menu.iconPath,
                                   color: isSelected
-                                      ? AppColors.lightShadowColor
-                                      : menu.color ?? AppColors.dark,
+                                      ? theme.colorScheme.onSecondary
+                                      : menu.color ?? theme.iconTheme.color,
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Text(
                                   menu.title,
                                   style: Theme.of(context)
@@ -71,8 +71,8 @@ class SideMenuWidget extends StatelessWidget {
                                       .titleMedium
                                       ?.copyWith(
                                         color: isSelected
-                                            ? AppColors.lightShadowColor
-                                            : AppColors.dark,
+                                            ? theme.colorScheme.surface
+                                            : theme.colorScheme.onSurface,
                                         fontWeight: isSelected
                                             ? FontWeight.bold
                                             : FontWeight.w500,

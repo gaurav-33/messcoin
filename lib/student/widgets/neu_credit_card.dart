@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import 'package:messcoin/config/app_colors.dart';
 
 class NeuCreditCard extends StatefulWidget {
   const NeuCreditCard({
@@ -79,12 +79,12 @@ class _NeuCreditCardState extends State<NeuCreditCard>
   }
 
   final List<Shadow> _shadows = [
-    Shadow(
-      color: AppColors.lightShadowColor,
+    const Shadow(
+      color: AppColors.darkLightShadowColor,
       blurRadius: 1,
       offset: Offset(-0.3, -0.3),
     ),
-    Shadow(
+    const Shadow(
       color: Colors.black,
       blurRadius: 4,
       offset: Offset(2, 2),
@@ -96,7 +96,8 @@ class _NeuCreditCardState extends State<NeuCreditCard>
       builder: (context, constraints) {
         final double cardWidth =
             constraints.maxWidth > 500 ? 500 : constraints.maxWidth;
-
+        final theme = Theme.of(context);
+        final isDarkMode = theme.brightness == Brightness.dark;
         return Container(
           constraints: const BoxConstraints(minHeight: 220),
           width: cardWidth,
@@ -110,19 +111,23 @@ class _NeuCreditCardState extends State<NeuCreditCard>
               ],
             ),
             border: Border.all(
-              color: AppColors.lightShadowColor.withOpacity(0.2),
+              color: AppColors.darkLightShadowColor.withOpacity(0.2),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(25),
             boxShadow: [
               BoxShadow(
-                color: AppColors.darkShadowColor,
-                offset: const Offset(10, 10),
+                color: isDarkMode
+                    ? AppColors.darkDarkShadowColor
+                    : AppColors.darkShadowColor,
+                offset: Offset(10, 10),
                 blurRadius: 10,
               ),
               BoxShadow(
-                color: AppColors.lightShadowColor,
-                offset: const Offset(-10, -10),
+                color: isDarkMode
+                    ? AppColors.darkLightShadowColor
+                    : AppColors.lightShadowColor,
+                offset: Offset(-10, -10),
                 blurRadius: 10,
               ),
             ],
@@ -144,7 +149,7 @@ class _NeuCreditCardState extends State<NeuCreditCard>
               Text(
                 'Mess Coin',
                 style: TextStyle(
-                  color: AppColors.bgColor.withOpacity(0.8),
+                  color: AppColors.neutralLight.withOpacity(0.8),
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
                   letterSpacing: 1.5,
@@ -205,7 +210,7 @@ class _NeuCreditCardState extends State<NeuCreditCard>
                 widget.fullName ?? 'Mess Coin User',
                 style: TextStyle(
                   fontSize: 20,
-                  color: AppColors.bgColor.withOpacity(0.8),
+                  color: AppColors.neutralLight.withOpacity(0.8),
                   letterSpacing: 2,
                   overflow: TextOverflow.ellipsis,
                   shadows: _shadows,
@@ -257,7 +262,7 @@ class _NeuCreditCardState extends State<NeuCreditCard>
                 style: TextStyle(
                     fontFamily: 'FiraCode',
                     fontSize: 22,
-                    color: AppColors.bgColor.withOpacity(0.8),
+                    color: AppColors.neutralLight.withOpacity(0.8),
                     letterSpacing: 1,
                     shadows: _shadows),
               )

@@ -82,7 +82,10 @@ class BillView extends StatelessWidget {
                             'Per Day Meal Price', '₹${bill.perDayMealPrice}'),
                         _buildBillRow('Meal Cost', '₹${bill.mealCost}'),
                         _buildBillRow('Coupon Amount', '₹${bill.couponAmount}'),
-                        const Divider(height: 32),
+                        Divider(
+                          height: 32,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         _buildBillRow('Final Amount', '₹${bill.finalAmount}',
                             isTotal: true),
                       ],

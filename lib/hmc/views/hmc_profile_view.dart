@@ -4,11 +4,10 @@ import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/hmc/controllers/hmc_profile_controller.dart';
 import '../../utils/extensions.dart';
 import '../../core/widgets/input_field.dart';
-import '../../../../config/app_colors.dart';
-import '../../../../core/widgets/neu_button.dart';
-import '../../../../core/widgets/neu_container.dart';
-import '../../../../core/widgets/neu_loader.dart';
-import '../../../../utils/responsive.dart';
+import '../../core/widgets/neu_button.dart';
+import '../../core/widgets/neu_container.dart';
+import '../../core/widgets/neu_loader.dart';
+import '../../utils/responsive.dart';
 
 class HmcProfileView extends StatelessWidget {
   const HmcProfileView({super.key});
@@ -17,6 +16,7 @@ class HmcProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HmcProfileController>();
     final bool isDesktop = Responsive.isDesktop(context);
+    final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
     double containerWidth = width * 0.9;
     if (isDesktop) {
@@ -35,7 +35,7 @@ class HmcProfileView extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              NeuAppBar(
+              const NeuAppBar(
                 toBack: true,
               ),
               const SizedBox(
@@ -48,7 +48,7 @@ class HmcProfileView extends StatelessWidget {
                 if (controller.error.isNotEmpty) {
                   return Center(
                       child: Text(controller.error.value,
-                          style: Theme.of(context).textTheme.bodyLarge));
+                          style: theme.textTheme.bodyLarge));
                 }
                 final admin = controller.admin.value;
                 if (admin == null) {
@@ -71,7 +71,7 @@ class HmcProfileView extends StatelessWidget {
                               image: NetworkImage(
                                   controller.admin.value!.imageUrl!),
                               placeholder:
-                                  AssetImage('assets/images/profile.png'),
+                                  const AssetImage('assets/images/profile.png'),
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) =>
                                   Image.asset(
@@ -88,28 +88,26 @@ class HmcProfileView extends StatelessWidget {
                     const SizedBox(height: 18),
                     Text(
                       admin.fullName.toCamelCase(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall!
-                          .copyWith(color: AppColors.primaryColor),
+                      style: theme.textTheme.headlineSmall!
+                          .copyWith(color: theme.colorScheme.secondary),
                     ),
                     const SizedBox(height: 6),
                     Text(admin.email,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                        style: theme.textTheme.bodyMedium),
                     const SizedBox(height: 6),
                     Text('Role: ${admin.role}',
-                        style: Theme.of(context).textTheme.bodyMedium),
+                        style: theme.textTheme.bodyMedium),
                     const SizedBox(height: 24),
                     Divider(
                       height: 32,
-                      color: AppColors.darkShadowColor,
+                      color: theme.dividerColor,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         NeuButton(
                           width: containerWidth * 0.4,
-                          child: Text("Update Password"),
+                          child: const Text("Update Password"),
                           onTap: () {
                             showChangePassword.value =
                                 !showChangePassword.value;
@@ -147,7 +145,7 @@ class HmcProfileView extends StatelessWidget {
                             NeuButton(
                                 width: containerWidth * 0.4,
                                 onTap: () => controller.changePassword(),
-                                child: Text('Update'))
+                                child: const Text('Update'))
                           ],
                         ),
                       )

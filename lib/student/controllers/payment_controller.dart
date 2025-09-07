@@ -142,7 +142,7 @@ class PaymentController extends GetxController {
       final String totalAmount = amount;
 
       if (isCustomAmount.value) {
-                final response = await TransactionService().createTransaction(
+        final response = await TransactionService().createTransaction(
           amount: double.parse(amount),
           item: 'others',
           qty: 1,
@@ -184,7 +184,7 @@ class PaymentController extends GetxController {
           return;
         }
 
-                final response = await TransactionService().createBulkTransaction(
+        final response = await TransactionService().createBulkTransaction(
           amount: parsedAmount,
           items: itemsPayload,
           counter: selectedCounter.value,
@@ -282,6 +282,7 @@ class PaymentController extends GetxController {
     String transactionId = '',
   }) {
     final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
 
     showDialog(
@@ -296,7 +297,7 @@ class PaymentController extends GetxController {
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: screenHeight * 0.8),
               child: Container(
-                color: AppColors.bgColor,
+                color: theme.colorScheme.surface,
                 width: Responsive.contentWidth(context),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -305,7 +306,7 @@ class PaymentController extends GetxController {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.check_circle_rounded,
-                          color: AppColors.primaryColor, size: 70),
+                          color: theme.colorScheme.secondary, size: 70),
                       const SizedBox(height: 16),
                       Text('Payment Successful!',
                           style: textTheme.headlineMedium),
@@ -325,7 +326,7 @@ class PaymentController extends GetxController {
                           Text("Total Paid", style: textTheme.titleLarge),
                           Text('₹$totalAmount',
                               style: textTheme.displaySmall?.copyWith(
-                                  color: AppColors.primaryColor,
+                                  color: theme.colorScheme.secondary,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'FiraCode')),
                         ],

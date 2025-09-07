@@ -4,8 +4,8 @@ import 'package:messcoin/core/models/transaction_model.dart';
 import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/core/widgets/neu_button.dart';
 import 'package:messcoin/core/widgets/neu_container.dart';
-import 'package:messcoin/config/app_colors.dart';
 import 'package:messcoin/core/widgets/neu_loader.dart';
+import 'package:messcoin/mess_staff/controllers/mess_staff_dashboard_controller.dart';
 import 'package:messcoin/mess_staff/controllers/mess_staff_transactions_controller.dart';
 import 'package:messcoin/utils/extensions.dart';
 import 'package:messcoin/utils/responsive.dart';
@@ -18,19 +18,20 @@ class MessStaffTransactionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final MessStaffTransactionsController controller =
         Get.find<MessStaffTransactionsController>();
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Header Section
               const SizedBox(
                 height: 10,
               ),
-              NeuAppBar(
+              const NeuAppBar(
                 toBack: true,
               ),
               const SizedBox(
@@ -39,8 +40,7 @@ class MessStaffTransactionsView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Transactions',
-                      style: Theme.of(context).textTheme.headlineMedium),
+                  Text('Transactions', style: theme.textTheme.headlineMedium),
                   const SizedBox(width: 12),
                   // ⭐️ UPDATE LIVE STATUS DISPLAY
                   Obx(() {
@@ -54,13 +54,12 @@ class MessStaffTransactionsView extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           controller.liveStatusText, // Use new getter
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: controller.isLive.value
-                                        ? Colors.green
-                                        : Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: controller.isLive.value
+                                ? Colors.green
+                                : Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     );
@@ -69,51 +68,53 @@ class MessStaffTransactionsView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               // Date Picker
-              Row(
-                children: [
-                  Obx(
-                    () => NeuButton(
-                      width: Responsive.isMobile(context)
-                          ? Responsive.contentWidth(context) * 0.4
-                          : Responsive.contentWidth(context) * 0.35,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      onTap: () async {
-                        await controller.pickDate(context);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.calendar_today,
-                              size: 20, color: AppColors.primaryColor),
-                          const SizedBox(width: 8),
-                          Text(
-                            controller.selectedDate,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.w500),
-                          ),
-                        ],
+              SizedBox(
+                width: Responsive.contentWidth(context),
+                child: Row(
+                  children: [
+                    Obx(
+                      () => NeuButton(
+                        width: Responsive.isMobile(context)
+                            ? Responsive.contentWidth(context) * 0.4
+                            : Responsive.contentWidth(context) * 0.35,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        onTap: () async {
+                          await controller.pickDate(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.calendar_today,
+                                size: 20, color: theme.colorScheme.secondary),
+                            const SizedBox(width: 8),
+                            Text(
+                              controller.selectedDate,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  NeuButton(
-                    width: 40,
-                    height: 40,
-                    shape: BoxShape.circle,
-                    onTap: () => controller.fetchTransactions(),
-                    child: Icon(Icons.refresh, color: AppColors.primaryColor),
-                  ),
-                ],
+                    const Spacer(),
+                    NeuButton(
+                      width: 40,
+                      height: 40,
+                      shape: BoxShape.circle,
+                      onTap: () => controller.fetchTransactions(),
+                      child: Icon(Icons.refresh,
+                          color: theme.colorScheme.secondary),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 16),
-              _buildCounterFilter(context, controller),
+              _buildCounterFilter(context, controller, theme),
               const SizedBox(height: 8),
               // ⭐️ ADD MEAL FILTER WIDGET
-              _buildMealFilter(context, controller),
+              _buildMealFilter(context, controller, theme),
 
               const SizedBox(height: 8),
 
@@ -132,36 +133,46 @@ class MessStaffTransactionsView extends StatelessWidget {
                         controller.isLoading.value
                             ? 'Loading...'
                             : 'No transactions found for this ${controller.selectedMealType.value.name.toCamelCase()}.',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium,
                       ),
                     );
                   }
                   return Column(
                     children: [
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 16),
-                          child: ListView.builder(
-                            // Use the filtered list's length
-                            itemCount: controller.displayTransactions.length,
-                            itemBuilder: (context, index) {
-                              // Get item from the filtered list
-                              final txn = controller.displayTransactions[index];
-                              return GestureDetector(
-                                onTap: () => _showTransactionBill(context, txn),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 16),
-                                  child: _buildTransactionTile(context, txn),
-                                ),
-                              );
-                            },
+                        child: Center(
+                          child: SizedBox(
+                            width: Responsive.contentWidth(context),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 16, bottom: 16),
+                              child: ListView.builder(
+                                // Use the filtered list's length
+                                itemCount:
+                                    controller.displayTransactions.length,
+                                itemBuilder: (context, index) {
+                                  // Get item from the filtered list
+                                  final txn =
+                                      controller.displayTransactions[index];
+                                  return GestureDetector(
+                                    onTap: () => _showTransactionBill(
+                                        context, txn, theme),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 16),
+                                      child: _buildTransactionTile(
+                                          context, txn, theme),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ),
                       // Pagination controls
                       if (controller.totalPages > 1)
-                        _buildPaginationControls(context, controller),
+                        _buildPaginationControls(context, controller, theme),
                     ],
                   );
                 }),
@@ -173,8 +184,8 @@ class MessStaffTransactionsView extends StatelessWidget {
     );
   }
 
-  Widget _buildCounterFilter(
-      BuildContext context, MessStaffTransactionsController controller) {
+  Widget _buildCounterFilter(BuildContext context,
+      MessStaffTransactionsController controller, ThemeData theme) {
     return Obx(() {
       return Wrap(
         spacing: 16,
@@ -191,11 +202,12 @@ class MessStaffTransactionsView extends StatelessWidget {
             width: 40,
             child: Text(
               '$counter',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isSelected ? AppColors.bgColor : AppColors.dark,
-                    fontWeight:
-                        isSelected ? FontWeight.w500 : FontWeight.normal,
-                  ),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: isSelected
+                    ? theme.colorScheme.onSecondary
+                    : theme.colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
+              ),
             ),
           );
         }),
@@ -204,8 +216,8 @@ class MessStaffTransactionsView extends StatelessWidget {
   }
 
   // ⭐️ ADD THIS NEW WIDGET FOR MEAL FILTERS
-  Widget _buildMealFilter(
-      BuildContext context, MessStaffTransactionsController controller) {
+  Widget _buildMealFilter(BuildContext context,
+      MessStaffTransactionsController controller, ThemeData theme) {
     return Obx(
       () => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -222,7 +234,7 @@ class MessStaffTransactionsView extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
                 child: NeuButton(
                   onTap: () => controller.changeMealType(meal),
-                  // color: isSelected ? AppColors.primaryColor : AppColors.bgColor,
+                  invert: isSelected,
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -232,8 +244,8 @@ class MessStaffTransactionsView extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: isSelected
-                            ? AppColors.primaryColor
-                            : AppColors.neutralDark,
+                            ? theme.colorScheme.onSecondary
+                            : theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -247,7 +259,8 @@ class MessStaffTransactionsView extends StatelessWidget {
   }
 
   // A more advanced tile for displaying transaction info to the admin.
-  Widget _buildTransactionTile(BuildContext context, TransactionModel txn) {
+  Widget _buildTransactionTile(
+      BuildContext context, TransactionModel txn, ThemeData theme) {
     // ... no changes needed here
     return NeuContainer(
       padding: const EdgeInsets.all(16),
@@ -259,43 +272,41 @@ class MessStaffTransactionsView extends StatelessWidget {
             children: [
               Text(
                 '₹ ${txn.amount.toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: AppColors.primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'FiraCode',
-                    ),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: theme.colorScheme.secondary,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'FiraCode',
+                ),
               ),
               Text(
                 txn.createdAt.toString().toKolkataTime(),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium,
               ),
             ],
           ),
           Divider(
-            color: AppColors.darkShadowColor,
+            color: theme.dividerColor,
           ),
 
           /// Student Info
           Text(
             txn.studentData?.fullName.toCamelCase() ?? 'Unknown Student',
-            style: Theme.of(context).textTheme.titleMedium,
+            style: theme.textTheme.titleMedium,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
           Text(
             'Roll: ${txn.studentData?.rollNo ?? 'N/A'}',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: theme.textTheme.bodySmall,
           ),
           const SizedBox(height: 2),
           Row(
             children: [
-              Text('Txn ID: ', style: Theme.of(context).textTheme.bodySmall),
+              Text('Txn ID: ', style: theme.textTheme.bodySmall),
               Expanded(
                 child: SelectableText(
                   txn.transactionId,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
+                  style: theme.textTheme.bodySmall
                       ?.copyWith(fontFamily: 'FiraCode'),
                 ),
               ),
@@ -307,8 +318,9 @@ class MessStaffTransactionsView extends StatelessWidget {
   }
 
   /// Shows a detailed bill/receipt for a single transaction.
-  void _showTransactionBill(BuildContext context, TransactionModel item) {
-    final textTheme = Theme.of(context).textTheme;
+  void _showTransactionBill(
+      BuildContext context, TransactionModel item, ThemeData theme) {
+    final textTheme = theme.textTheme;
 
     showDialog(
       context: context,
@@ -320,20 +332,20 @@ class MessStaffTransactionsView extends StatelessWidget {
             clipper: ReceiptClipper(),
             child: Container(
               width: Responsive.contentWidth(context),
-              color: AppColors.bgColor,
+              color: theme.colorScheme.surface,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.receipt_long,
-                        color: AppColors.primaryColor, size: 60),
+                    Icon(Icons.receipt_long,
+                        color: theme.colorScheme.secondary, size: 60),
                     const SizedBox(height: 16),
                     Text('Transaction Receipt', style: textTheme.headlineSmall),
                     const SizedBox(height: 24),
 
                     // Item Details Section
-                    _buildItemRow(context, item),
+                    _buildItemRow(context, item, theme),
                     const SizedBox(height: 16),
                     const DashedLine(),
                     const SizedBox(height: 16),
@@ -341,36 +353,40 @@ class MessStaffTransactionsView extends StatelessWidget {
                     // Total Amount
                     _buildDetailRow(context, 'Total Paid',
                         '₹${item.amount.toStringAsFixed(2)}',
-                        isAmount: true),
+                        isAmount: true, theme: theme),
                     const SizedBox(height: 16),
                     const DashedLine(),
                     const SizedBox(height: 16),
 
                     // Transaction Info
                     _buildDetailRow(context, 'Billed To:',
-                        item.studentData?.fullName.toCamelCase() ?? 'N/A'),
+                        item.studentData?.fullName.toCamelCase() ?? 'N/A',
+                        theme: theme),
                     _buildDetailRow(
-                        context, 'Roll No:', item.studentData?.rollNo ?? 'N/A'),
+                        context, 'Roll No:', item.studentData?.rollNo ?? 'N/A',
+                        theme: theme),
                     _buildDetailRow(
                         context,
                         'Billed By:',
-                        // Get.find<DashboardController>()
-                        //         .messDetail
-                        //         .value
-                        //         ?.name
-                        //         .toCamelCase() ??
-                        'Unkonwn'),
+                        Get.find<MessStaffDashboardController>()
+                                .messDetail
+                                .value
+                                ?.name
+                                .toCamelCase() ??
+                            'Unkonwn',
+                        theme: theme),
                     _buildDetailRow(context, 'Time:',
-                        item.createdAt.toString().toKolkataTime()),
+                        item.createdAt.toString().toKolkataTime(),
+                        theme: theme),
                     _buildDetailRow(context, 'Txn. ID:', item.transactionId,
-                        isSelectable: true),
+                        isSelectable: true, theme: theme),
                     const SizedBox(height: 32),
 
                     NeuButton(
                       shape: BoxShape.circle,
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.close_rounded,
-                          color: AppColors.lightDark),
+                      child: Icon(Icons.close_rounded,
+                          color: theme.iconTheme.color),
                     ),
                   ],
                 ),
@@ -384,8 +400,10 @@ class MessStaffTransactionsView extends StatelessWidget {
 
   /// Helper to show a row in the receipt (e.g., "Billed To:", "John Doe").
   Widget _buildDetailRow(BuildContext context, String title, String value,
-      {bool isAmount = false, bool isSelectable = false}) {
-    final textTheme = Theme.of(context).textTheme;
+      {bool isAmount = false,
+      bool isSelectable = false,
+      required ThemeData theme}) {
+    final textTheme = theme.textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
@@ -407,10 +425,11 @@ class MessStaffTransactionsView extends StatelessWidget {
                     textAlign: TextAlign.end,
                     style: isAmount
                         ? textTheme.headlineSmall?.copyWith(
-                            color: AppColors.primaryColor,
+                            color: theme.colorScheme.secondary,
                             fontWeight: FontWeight.bold)
                         : textTheme.bodyLarge?.copyWith(
-                            color: AppColors.dark, fontWeight: FontWeight.w500),
+                            color: theme.colorScheme.onSurface,
+                            fontWeight: FontWeight.w500),
                   ),
           ),
         ],
@@ -419,8 +438,9 @@ class MessStaffTransactionsView extends StatelessWidget {
   }
 
   /// Helper to show the purchased item row in the receipt.
-  Widget _buildItemRow(BuildContext context, TransactionModel txn) {
-    final textTheme = Theme.of(context).textTheme;
+  Widget _buildItemRow(
+      BuildContext context, TransactionModel txn, ThemeData theme) {
+    final textTheme = theme.textTheme;
     return Column(
       children: [
         Row(
@@ -472,8 +492,8 @@ class MessStaffTransactionsView extends StatelessWidget {
   }
 
   /// Builds the pagination buttons at the bottom.
-  Widget _buildPaginationControls(
-      BuildContext context, MessStaffTransactionsController controller) {
+  Widget _buildPaginationControls(BuildContext context,
+      MessStaffTransactionsController controller, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -492,9 +512,7 @@ class MessStaffTransactionsView extends StatelessWidget {
           const SizedBox(width: 16),
           Text(
             'Page ${controller.currentPage} of ${controller.totalPages}',
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
+            style: theme.textTheme.bodyLarge
                 ?.copyWith(fontWeight: FontWeight.bold, fontFamily: 'FiraCode'),
           ),
           const SizedBox(width: 16),
@@ -530,9 +548,10 @@ class DashedLine extends StatelessWidget {
 class DashedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final theme = Theme.of(Get.context!);
     double dashWidth = 5, dashSpace = 5, startX = 0;
     final paint = Paint()
-      ..color = AppColors.lightDark.withOpacity(0.5)
+      ..color = theme.dividerColor.withOpacity(0.5)
       ..strokeWidth = 1;
     while (startX < size.width) {
       canvas.drawLine(Offset(startX, 0), Offset(startX + dashWidth, 0), paint);

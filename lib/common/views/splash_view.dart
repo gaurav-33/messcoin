@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../common/controllers/splash_controller.dart';
-import '../../config/app_colors.dart';
-import '../../core/widgets/neu_button.dart';
+import '../../utils/responsive.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -11,20 +10,25 @@ class SplashView extends StatefulWidget {
   State<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  final SplashController controller =  Get.put(SplashController());
+class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _fadeAnimation;
+  final SplashController controller = Get.put(SplashController());
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 2000),
     );
-    _scaleAnimation = Tween<double>(begin: 0.1, end: 1.0)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
     _controller.forward();
   }
 
@@ -36,37 +40,40 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      body: Stack(
-        children: [
-          Center(
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: Text(
-                'Mess Coin',
-                style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 50,
-            child: Center(
-              child: NeuButton(
-                shape: BoxShape.circle,
-                height: 70,
-                width: 70,
-                child: CircularProgressIndicator(
-                  color: AppColors.dark,
+      backgroundColor: theme.colorScheme.background,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FadeTransition(
+              opacity: _fadeAnimation,
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: Column(
+                  children: [
+                    SizedBox(
+                        width: Responsive.contentWidth(context) * 0.5,
+                        child: Image.asset(
+                          "assets/images/mess-coin-logo.png",
+                        )),
+                    // const SizedBox(height: 20),
+                    // Text(
+                    //   'Mess Coin',
+                    //   style: theme.textTheme.headlineLarge,
+                    // ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 50),
+            CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(theme.colorScheme.secondary),
+            ),
+          ],
+        ),
       ),
     );
   }

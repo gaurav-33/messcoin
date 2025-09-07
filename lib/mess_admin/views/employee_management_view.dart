@@ -32,7 +32,7 @@ class EmployeeManagementView extends StatelessWidget {
                   child: NeuButton(
                       onTap: () => Scaffold.of(context).openDrawer(),
                       width: 45,
-                      child: Icon(Icons.menu, color: AppColors.dark, size: 24)),
+                      child: Icon(Icons.menu, size: 24)),
                 ),
               if (!isDesktop) const SizedBox(width: 16),
               Text('Employee Management',

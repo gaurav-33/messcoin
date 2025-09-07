@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:messcoin/config/app_colors.dart';
 import 'package:messcoin/core/routes/hmc_routes.dart';
 import 'package:messcoin/hmc/controllers/dashboard_controller.dart';
 import '../../core/widgets/app_bar.dart';
@@ -30,6 +29,7 @@ class HmcDashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final HmcDashboardController controller =
         Get.find<HmcDashboardController>();
     final List<_GridItem> gridItems = [
@@ -39,7 +39,7 @@ class HmcDashboardView extends StatelessWidget {
           onTap: () => Get.toNamed(HmcRoutes.getMessRatings()),
           circle: true,
           isSpecial: true,
-          color: AppColors.primaryColor),
+          color: theme.colorScheme.secondary),
       _GridItem(
         image: 'assets/images/feedback.png',
         title: 'Feedback',
@@ -68,13 +68,13 @@ class HmcDashboardView extends StatelessWidget {
           image: 'assets/images/logout.png',
           title: 'Logout',
           onTap: () => controller.logout(),
-          color: AppColors.primaryColor.withOpacity(0.6),
+          color: theme.colorScheme.error,
           circle: true),
     ];
     return Scaffold(
         body: SafeArea(
             child: Padding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 16),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -167,6 +167,7 @@ class NeuTileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
       width: size + 10,
       child: Column(
@@ -181,7 +182,7 @@ class NeuTileButton extends StatelessWidget {
             child: Image.asset(
               image,
               height: circle == true && isSpecial == true ? size : size * 0.7,
-              color: color ?? AppColors.dark,
+              color: color ?? theme.colorScheme.onSurface,
             ),
           ),
           if (title != null && title!.isNotEmpty)
@@ -189,7 +190,7 @@ class NeuTileButton extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6.0),
               child: Text(
                 title!,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: theme.textTheme.bodySmall,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
