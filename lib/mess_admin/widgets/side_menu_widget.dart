@@ -28,7 +28,7 @@ class SideMenuWidget extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                const NeuAppBar(),
+                NeuAppBar(showThemeSwitch: true),
                 const SizedBox(
                   height: 50,
                 ),

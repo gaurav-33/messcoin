@@ -43,19 +43,43 @@ class LoginController extends GetxController {
       if (response.isSuccess) {
         AppSnackbar.success(response.message ?? 'Login successful');
         await AuthBoxManager.clearToken();
-        await AuthBoxManager.saveToken(response.data['data']['accessToken']);
-        await RoleBoxManager.clearRole();
-        await RoleBoxManager.saveRole(response.data['data']['student']
-                ?['role'] ??
-            response.data['data']['admin']?['role']);
-        String role = response.data['data']['student']?['role'] ??
-            response.data['data']['admin']?['role'];
-        if (role == 'hmc_admin') {
-          Get.offAllNamed(HmcRoutes.getDashboard());
-        } else if (role == 'mess_admin') {
-          Get.offAllNamed(AdminRoutes.getDashboard());
+
+        final dynamic rawData = response.data['data'];
+        Map<String, dynamic> data;
+
+        if (rawData is List) {
+          if (rawData.isNotEmpty && rawData[0] is Map<String, dynamic>) {
+            data = rawData[0];
+          } else {
+            AppSnackbar.error('Login failed: Invalid user data format.');
+            isLoading.value = false;
+            return;
+          }
+        } else if (rawData is Map<String, dynamic>) {
+          data = rawData;
         } else {
-          Get.offAllNamed(StudentRoutes.getDashboard());
+          AppSnackbar.error('Login failed: Unexpected data format.');
+          isLoading.value = false;
+          return;
+        }
+
+        await AuthBoxManager.saveToken(data['accessToken']);
+        await RoleBoxManager.clearRole();
+        String? role = (data['student'] as Map<String, dynamic>?)?['role'] ??
+            (data['admin'] as Map<String, dynamic>?)?['role'];
+
+        if (role != null) {
+          await RoleBoxManager.saveRole(role);
+          if (role == 'hmc_admin') {
+            Get.offAllNamed(HmcRoutes.getDashboard());
+          } else if (role == 'mess_admin') {
+            Get.offAllNamed(AdminRoutes.getDashboard());
+          } else {
+            Get.offAllNamed(StudentRoutes.getDashboard());
+          }
+        } else {
+          AppSnackbar.error('Login failed: User role not found.');
+          isLoading.value = false;
         }
       } else {
         if (response.message == 'Please verify your email first') {

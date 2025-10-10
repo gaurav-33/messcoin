@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../config/app_colors.dart';
 import '../../../../core/widgets/neu_container.dart';
 
 class StatCardWidget extends StatelessWidget {
@@ -25,7 +24,7 @@ class StatCardWidget extends StatelessWidget {
         children: [
           SvgPicture.asset(
             iconPath,
-            color: AppColors.dark,
+            color: Theme.of(context).colorScheme.primary,
           ),
           Text(value, style: Theme.of(context).textTheme.titleLarge),
           Text(

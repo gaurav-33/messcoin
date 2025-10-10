@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Mess Coin',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       home: const SplashView(),
       getPages: AppRoutes.routes,
       initialRoute: AppRoutes.getSplash(),

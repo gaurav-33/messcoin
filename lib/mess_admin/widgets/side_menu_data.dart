@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:messcoin/core/routes/admin_routes.dart';
 import '../../mess_admin/controllers/dashboard_controller.dart';
 import '../../../../config/app_colors.dart';
+import '../../utils/logout_confirmation_dialog.dart';
 
 class SideMenuModel {
   final String iconPath;
@@ -77,7 +78,7 @@ class SideMenuData {
     SideMenuModel(
       iconPath: 'assets/svgs/logout.svg',
       title: 'Logout',
-      onTap: () => Get.find<DashboardController>().logout(),
+      onTap: () => showLogoutConfirmationDialog(context: Get.context!, onConfirm: ()=>Get.find<DashboardController>().logout()),
       color: AppColors.primaryColor,
     ),
   ];

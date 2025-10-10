@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import '../../core/widgets/neu_container.dart';
 
 class NeuAppBar extends StatelessWidget {
-  const NeuAppBar({super.key, this.toBack = false});
+  const NeuAppBar(
+      {super.key, this.toBack = false, this.showThemeSwitch = false});
   final bool? toBack;
+  final bool? showThemeSwitch;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,8 @@ class NeuAppBar extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  icon: SvgPicture.asset('assets/svgs/back.svg', color: theme.iconTheme.color),
+                  icon: SvgPicture.asset('assets/svgs/back.svg',
+                      color: theme.iconTheme.color),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -38,19 +41,22 @@ class NeuAppBar extends StatelessWidget {
                 style: theme.textTheme.headlineLarge,
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                iconSize: 20,
-                icon: Icon(
-                  isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                  color: theme.iconTheme.color,
-                ),
-                onPressed: () {
-                  Get.changeThemeMode(isDarkMode ? ThemeMode.light : ThemeMode.dark);
-                },
-              ),
-            ),
+            showThemeSwitch ?? false
+                ? Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      iconSize: 20,
+                      icon: Icon(
+                        isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                        color: theme.iconTheme.color,
+                      ),
+                      onPressed: () {
+                        Get.changeThemeMode(
+                            isDarkMode ? ThemeMode.light : ThemeMode.dark);
+                      },
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),

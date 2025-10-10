@@ -61,7 +61,7 @@ class LineChartWidget extends StatelessWidget {
     );
     final bottomTitle = {
       for (int i = 0; i < paddedData.length; i++)
-        i: "${paddedData[i].date.day.toString().padLeft(2, '0')}/${paddedData[i].date.month.toString().padLeft(2, '0')}"
+        i: "${paddedData[i].date.toLocal().day.toString().padLeft(2, '0')}/${paddedData[i].date.toLocal().month.toString().padLeft(2, '0')}"
     };
 
     return NeuContainer(

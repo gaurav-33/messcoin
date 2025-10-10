@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:messcoin/utils/logout_confirmation_dialog.dart';
 import '../../core/routes/student_routes.dart';
 import '../../core/widgets/app_bar.dart';
 import '../../core/widgets/neu_button.dart';
@@ -85,7 +86,8 @@ class DashboradView extends StatelessWidget {
       _GridItem(
         image: 'assets/images/logout.png',
         title: 'Logout',
-        onTap: () => controller.logout(),
+        onTap: () => showLogoutConfirmationDialog(
+            context: context, onConfirm: () => controller.logout()),
         color: theme.colorScheme.error,
       ),
     ];
@@ -97,7 +99,9 @@ class DashboradView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: screenHeight * 0.01),
-              NeuAppBar(),
+              NeuAppBar(
+                showThemeSwitch: true,
+              ),
               SizedBox(height: screenHeight * 0.025),
               Padding(
                 padding:

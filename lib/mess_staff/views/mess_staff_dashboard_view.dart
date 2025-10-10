@@ -4,6 +4,7 @@ import 'package:messcoin/core/widgets/app_bar.dart';
 import 'package:messcoin/core/widgets/neu_button.dart';
 import 'package:messcoin/mess_staff/controllers/mess_staff_dashboard_controller.dart';
 import 'package:messcoin/core/routes/mess_staff_routes.dart';
+import '../../utils/logout_confirmation_dialog.dart';
 import '../../utils/responsive.dart';
 
 class _GridItem {
@@ -43,7 +44,8 @@ class MessStaffDashboardView extends StatelessWidget {
       _GridItem(
           image: 'assets/images/logout.png',
           title: 'Logout',
-          onTap: () => controller.logout(),
+          onTap: () => showLogoutConfirmationDialog(
+              context: context, onConfirm: () => controller.logout()),
           color: theme.colorScheme.error,
           circle: true),
     ];
@@ -59,7 +61,7 @@ class MessStaffDashboardView extends StatelessWidget {
                   height: 10,
                 ),
                 const NeuAppBar(
-                  toBack: false,
+                  showThemeSwitch: true,
                 ),
                 const SizedBox(
                   height: 24,

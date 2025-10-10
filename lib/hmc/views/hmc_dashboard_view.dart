@@ -4,6 +4,7 @@ import 'package:messcoin/core/routes/hmc_routes.dart';
 import 'package:messcoin/hmc/controllers/dashboard_controller.dart';
 import '../../core/widgets/app_bar.dart';
 import '../../core/widgets/neu_button.dart';
+import '../../utils/logout_confirmation_dialog.dart';
 import '../../utils/responsive.dart';
 
 class _GridItem {
@@ -67,7 +68,7 @@ class HmcDashboardView extends StatelessWidget {
       _GridItem(
           image: 'assets/images/logout.png',
           title: 'Logout',
-          onTap: () => controller.logout(),
+          onTap: () => showLogoutConfirmationDialog(context: context, onConfirm: ()=>controller.logout()),
           color: theme.colorScheme.error,
           circle: true),
     ];
@@ -79,7 +80,7 @@ class HmcDashboardView extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            const NeuAppBar(),
+            const NeuAppBar(showThemeSwitch: true,),
             const SizedBox(height: 24),
             Text(
               'HMC Dashboard',

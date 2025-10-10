@@ -21,7 +21,6 @@ class Student {
   }
 }
 
-
 // The new BillModel class
 class BillModel {
   final String id;
@@ -34,9 +33,12 @@ class BillModel {
   final int leaveDays;
   final int attendedDays;
   final double perDayMealPrice;
-  final double mealCost;
+  final double amount;
   final double couponAmount;
-  final double finalAmount;
+  final double rebate;
+  final double amountIncludingCoupon;
+  final double gst;
+  final double netAmount;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -51,9 +53,12 @@ class BillModel {
     required this.leaveDays,
     required this.attendedDays,
     required this.perDayMealPrice,
-    required this.mealCost,
+    required this.amount,
     required this.couponAmount,
-    required this.finalAmount,
+    required this.rebate,
+    required this.amountIncludingCoupon,
+    required this.gst,
+    required this.netAmount,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -70,7 +75,8 @@ class BillModel {
     } else if (studentField is Map) {
       // Handles case where student is a populated object
       studentId = studentField['_id'] ?? '';
-      populatedStudentData = Student.fromJson(Map<String, dynamic>.from(studentField));
+      populatedStudentData =
+          Student.fromJson(Map<String, dynamic>.from(studentField));
     }
     // --- End of Flexible Student Handling ---
 
@@ -78,18 +84,24 @@ class BillModel {
       id: json['_id'] ?? '',
       student: studentId,
       studentData: populatedStudentData,
-      mess: json['mess'] is String ? json['mess'] : (json['mess']?['_id'] ?? ''),
+      mess:
+          json['mess'] is String ? json['mess'] : (json['mess']?['_id'] ?? ''),
       month: (json['month'] ?? 0).toInt(),
       year: (json['year'] ?? 0).toInt(),
       totalDays: (json['totalDays'] ?? 0).toInt(),
       leaveDays: (json['leaveDays'] ?? 0).toInt(),
       attendedDays: (json['attendedDays'] ?? 0).toInt(),
       perDayMealPrice: (json['perDayMealPrice'] ?? 0.0).toDouble(),
-      mealCost: (json['mealCost'] ?? 0.0).toDouble(),
+      amount: (json['amount'] ?? 0.0).toDouble(),
       couponAmount: (json['couponAmount'] ?? 0.0).toDouble(),
-      finalAmount: (json['finalAmount'] ?? 0.0).toDouble(),
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
-      updatedAt: DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
+      rebate: (json['rebate'] ?? 0.0).toDouble(),
+      amountIncludingCoupon: (json['amountIncludingCoupon'] ?? 0.0).toDouble(),
+      gst: (json['gst'] ?? 0.0).toDouble(),
+      netAmount: (json['netAmount'] ?? 0.0).toDouble(),
+      createdAt:
+          DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      updatedAt:
+          DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
     );
   }
 
@@ -105,9 +117,12 @@ class BillModel {
       'leaveDays': leaveDays,
       'attendedDays': attendedDays,
       'perDayMealPrice': perDayMealPrice,
-      'mealCost': mealCost,
+      'amount': amount,
+      'rebate':rebate,
+      'amountIncludingCoupon': amountIncludingCoupon,
+      'gst': gst,
+      'netAmount': netAmount,
       'couponAmount': couponAmount,
-      'finalAmount': finalAmount,
     };
   }
 }

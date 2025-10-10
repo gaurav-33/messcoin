@@ -41,6 +41,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = Brightness.dark == Theme.of(context).brightness;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       body: Center(
@@ -56,7 +57,9 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
                     SizedBox(
                         width: Responsive.contentWidth(context) * 0.5,
                         child: Image.asset(
-                          "assets/images/mess-coin-logo.png",
+                          isDark
+                              ? "assets/images/mess-coin-logo-dark.png"
+                              : "assets/images/mess-coin-logo-light.png",
                         )),
                     // const SizedBox(height: 20),
                     // Text(
