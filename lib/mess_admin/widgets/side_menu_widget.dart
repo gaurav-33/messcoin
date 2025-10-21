@@ -49,8 +49,8 @@ class SideMenuWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             onTap: () {
                               controller.selectedIndex = index;
-                              menu.onTap();
-                              if (!Responsive.isDesktop(context)) {
+                              menu.onTap(context);
+                              if (index != menuData.length - 1 && !Responsive.isDesktop(context)) {
                                 Get.back();
                               }
                             },
