@@ -30,7 +30,6 @@
 - [Download for Testing](#-download-for-testing)
 - [Test Credentials](#-test-credentials)
 - [Project Structure](#-project-structure)
-- [Contributing](#-contributing)
 - [License](#-license)
 - [Contact](#-contact)
 
@@ -97,15 +96,14 @@ MessCoin is built with a modern and scalable tech stack, ensuring a high-quality
 
 Here are some glimpses of the MessCoin application.
 
-*(Please replace the placeholder links with actual screenshots of your application)*
 
 | Login Screen | Student Dashboard | Admin Dashboard |
 | :---: | :---: | :---: |
-| ![Login Screen](https://via.placeholder.com/300x600.png?text=Login+Screen) | ![Student Dashboard](https://via.placeholder.com/300x600.png?text=Student+Dashboard) | ![Admin Dashboard](https://via.placeholder.com/300x600.png?text=Admin+Dashboard) |
+| ![login](https://github.com/user-attachments/assets/a13631c6-b1af-4345-be4c-0e1d057d8457) | ![Student Dashboard](https://github.com/user-attachments/assets/97a86f9b-c920-4d86-b831-b2dab3169a6d) | ![Admin Dashboard](https://github.com/user-attachments/assets/23d13226-688b-467f-b712-951c356cc2f8) |
 
 | Menu Page | Transaction History | Feedback Page |
 | :---: | :---: | :---: |
-| ![Menu Page](https://via.placeholder.com/300x600.png?text=Menu+Page) | ![Transaction History](https://via.placeholder.com/300x600.png?text=Transaction+History) | ![Feedback Page](https://via.placeholder.com/300x600.png?text=Feedback+Page) |
+| ![menu](https://github.com/user-attachments/assets/284ddd1b-dabb-4fa0-8041-6fe7062865bc) | ![history](https://github.com/user-attachments/assets/98672225-305d-40dc-9d2b-845a1ad44cda) | ![feedback](https://github.com/user-attachments/assets/0d9d29a6-0e83-4afb-89d5-0bd8fb49f874) |
 
 ---
 
@@ -114,7 +112,7 @@ Here are some glimpses of the MessCoin application.
 A complete video walkthrough of the admin role, showcasing all the features from user management to analytics.
 
 
-[**Watch the Admin Role Demo Here**](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+[**Watch the Admin Role Demo Here**](https://youtu.be/0JJSJ-SnTLQ)
 
 ---
 
@@ -164,10 +162,8 @@ To get a local copy up and running, follow these simple steps.
 
 You can test the application by downloading the pre-built binaries for Android and Windows.
 
-*(Please replace the placeholder links with actual download links for your `.apk` and `.exe` files)*
-
-- [**Download for Android (.apk)**](https://example.com/messcoin.apk)
-- [**Download for Windows (.exe)**](https://example.com/messcoin.exe)
+- [**Download for Android (.apk)**](https://drive.google.com/file/d/1iw_WesCWBdBGG9zSErj8f-QkG7XI94sK/view?usp=sharing)
+- [**Download for Windows (.exe)**](https://drive.google.com/file/d/1ymOr4ByQ7C8LVaYQL1UAXyCgKetmz4be/view?usp=sharing)
 
 ---
 
