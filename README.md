@@ -173,10 +173,10 @@ Use the following credentials to test the application with different user roles.
 
 | Role | Username | Password |
 | :--- | :--- | :--- |
-| **Student** | `student@test.com` | `password` |
-| **Mess Admin** | `messadmin@test.com` | `password` |
-| **HMC Admin** | `hmcadmin@test.com` | `password` |
-| **Employee** | `employee@test.com` | `password` |
+| **Student** | `test.student1@nitp.ac.in` | `password123` |
+| **Mess Admin** | `manager@nitp.ac.in` | `password123` |
+| **HMC Admin** | `hmc@nitp.ac.in` | `password123` |
+| **Employee** | `9876543201` | `password123` |
 
 ---
 
